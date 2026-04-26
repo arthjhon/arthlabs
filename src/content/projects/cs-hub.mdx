@@ -1,0 +1,22 @@
+---
+title: "CS Hub"
+description: "Plataforma de estatísticas e análise para Counter-Strike, inspirada em HLTV/Leetify. Monorepo Turborepo com Next.js e Fastify."
+tags: [Next.js, Fastify, Prisma, BullMQ, MinIO, PostgreSQL]
+status: wip
+github: "https://github.com/arthlabs/cs-hub"
+demo: ""
+date: 2025-11-01
+featured: true
+---
+
+## Visão
+
+Demo parser, rating de jogadores, rankings de mapas e histórico de partidas, com foco em cenas locais/amadoras que as plataformas grandes não cobrem bem.
+
+## Stack
+
+- **Frontend:** Next.js 14 (App Router)
+- **Backend:** Fastify + Prisma
+- **Jobs:** BullMQ (parsing de demos é assíncrono)
+- **Storage:** MinIO para as demos
+- **Banco:** PostgreSQL

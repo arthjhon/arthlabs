@@ -1,0 +1,81 @@
+---
+interface Category {
+  key: string;
+  label: string;
+  comment: string;
+  items: string[];
+}
+
+const categories: Category[] = [
+  {
+    key: 'infra',
+    label: 'infra & networks',
+    comment: 'pfSense, VLANs, firewall, VPN site-to-site, base CCNA',
+    items: ['pfSense', 'VLANs', 'NAT/DHCP', 'OpenVPN', 'Cisco / CCNA', 'Site-to-Site'],
+  },
+  {
+    key: 'virt',
+    label: 'virtualization & homelab',
+    comment: 'Proxmox, VMs, templates, homelab completo',
+    items: ['Proxmox VE', 'VMs / Templates', 'Homelab', 'Virtualização de firewall'],
+  },
+  {
+    key: 'devops',
+    label: 'containers & devops',
+    comment: 'Docker em produção, Portainer, redes MACVLAN',
+    items: ['Docker', 'Portainer', 'MACVLAN', 'CI/CD'],
+  },
+  {
+    key: 'cloud',
+    label: 'cloud & integrations',
+    comment: 'VPS AWS/GCP, SSH, Cloudflare DNS, exposição de serviços',
+    items: ['AWS', 'GCP', 'Cloudflare', 'SSH', 'DNS / domínios'],
+  },
+  {
+    key: 'sec',
+    label: 'security & access',
+    comment: 'OpenVPN + AD, chaves SSH, segmentação de rede',
+    items: ['OpenVPN + AD', 'SSH keys', 'Linux ACL', 'Network Segmentation'],
+  },
+  {
+    key: 'servers',
+    label: 'servers & systems',
+    comment: 'Linux Ubuntu/Debian, GLPI, TrueNAS, Active Directory, SMB',
+    items: ['Ubuntu / Debian', 'GLPI', 'TrueNAS', 'Active Directory', 'Samba / SMB'],
+  },
+  {
+    key: 'observability',
+    label: 'monitoring & observability',
+    comment: 'Zabbix, Grafana, InfluxDB, alertas e bots de monitoramento',
+    items: ['Zabbix', 'Grafana', 'InfluxDB', 'Custom alerts', 'Bots de monitoring'],
+  },
+  {
+    key: 'auto',
+    label: 'automation & scripts',
+    comment: 'Bots Discord/Telegram, autounattend.xml, winget, scripts',
+    items: ['Python', 'Bash', 'Discord/Telegram bots', 'autounattend.xml', 'winget'],
+  },
+  {
+    key: 'web',
+    label: 'web & projects',
+    comment: 'Sites institucionais, deploy frontend, gestão de DNS',
+    items: ['TypeScript', 'Astro / Vite', 'Node.js', 'Frontend deploy'],
+  },
+];
+---
+
+<div class="skills-wrap">
+  {categories.map((cat) => (
+    <div class="skills-category" data-reveal>
+      <div class="skills-cat-head">
+        <span class="skills-cat-comment">// {cat.label}</span>
+      </div>
+      <div class="skills-cat-desc">{cat.comment}</div>
+      <div class="skills-chip-row">
+        {cat.items.map((item) => (
+          <span class="skills-chip">{item}</span>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>

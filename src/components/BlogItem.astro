@@ -1,0 +1,27 @@
+---
+interface Props {
+  title: string;
+  excerpt: string;
+  date: Date;
+  tags: string[];
+  slug: string;
+  dateFormat?: 'short' | 'long';
+}
+
+const { title, excerpt, date, tags, slug, dateFormat = 'long' } = Astro.props;
+const iso = date.toISOString().slice(0, 10);
+const short = date.toISOString().slice(0, 7);
+---
+
+<a href={`/blog/${slug}`} class="blog-item">
+  <div class="blog-date">{dateFormat === 'short' ? short : iso}</div>
+  <div class="blog-content">
+    <div class="blog-title">{title}</div>
+    <div class="blog-excerpt">{excerpt}</div>
+    {tags.length > 0 && (
+      <div class="blog-tags-inline">
+        {tags.map((t) => <span class="tag">{t}</span>)}
+      </div>
+    )}
+  </div>
+</a>

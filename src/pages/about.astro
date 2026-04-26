@@ -1,0 +1,115 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Skills from '../components/Skills.astro';
+import ContactCTA from '../components/ContactCTA.astro';
+
+const homelab = [
+  { label: 'hypervisor', value: 'Proxmox VE' },
+  { label: 'firewall', value: 'pfSense (virtualizado)' },
+  { label: 'monitoring', value: 'Zabbix + Grafana + InfluxDB' },
+  { label: 'storage', value: 'TrueNAS' },
+  { label: 'identity', value: 'Samba4 AD' },
+  { label: 'containers', value: 'Docker + Portainer' },
+  { label: 'helpdesk', value: 'GLPI' },
+  { label: 'remote', value: 'OpenVPN + AD auth' },
+];
+
+const differentiators = [
+  'Construção e gestão de homelab completo',
+  'Experiência prática (não só teórica)',
+  'Integração entre múltiplas tecnologias',
+  'Perfil voltado para infra + automação + monitoramento',
+];
+
+const currently = [
+  'Sentinela — telemetria celular via SIM7000G',
+  'Engenharia de Computação — Maceió/AL',
+  'Associação Atlética de Esports na UMJ',
+  'TeraNex Vault — armazenamento seguro para PMEs',
+];
+---
+
+<Layout title="Sobre · arThLabs" description="Quem é Arthur — engenheiro de infra, maker e estudante de CS.">
+  <section class="page">
+    <div class="about-hero" data-reveal>
+      <div class="hero-prompt">$ whoami</div>
+      <h1 class="about-name">Arthur Jhonathas</h1>
+      <div class="about-role">IT Infrastructure Engineer · Maker · DevOps</div>
+      <p class="about-text about-bio">
+        Fundador da <strong>TeraNex Tecnologia</strong> — empresa de infraestrutura e suporte gerenciado para PMEs em Maceió/AL.
+        O <strong>arThLabs</strong> é onde fico à vontade pra experimentar: projetos pessoais em IoT, software, automação
+        e infra que não cabem no portfólio da empresa mas ensinam muito.
+      </p>
+    </div>
+
+    <div class="section-header" data-reveal>
+      <span class="section-label">stack & expertise</span>
+      <div class="section-line"></div>
+    </div>
+    <Skills />
+
+    <div class="section-header" data-reveal>
+      <span class="section-label">homelab</span>
+      <div class="section-line"></div>
+      <span class="section-meta">running 24/7</span>
+    </div>
+    <div class="homelab-grid" data-reveal>
+      {homelab.map((row) => (
+        <div class="homelab-row">
+          <span class="homelab-key">// {row.label}</span>
+          <span class="homelab-val">{row.value}</span>
+        </div>
+      ))}
+    </div>
+
+    <div class="section-header" data-reveal>
+      <span class="section-label">diferenciais</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="diff-grid" data-reveal>
+      {differentiators.map((d, i) => (
+        <div class="diff-item">
+          <div class="diff-num">0{i + 1}</div>
+          <div class="diff-text">{d}</div>
+        </div>
+      ))}
+    </div>
+
+    <div class="section-header" data-reveal>
+      <span class="section-label">atualmente</span>
+      <div class="section-line"></div>
+    </div>
+    <ul class="currently-list" data-reveal>
+      {currently.map((c) => (
+        <li class="currently-item"><span class="currently-bullet">›</span>{c}</li>
+      ))}
+    </ul>
+
+    <ContactCTA />
+  </section>
+
+  <script>
+    const reveal = () => {
+      const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduced) {
+        els.forEach((el) => el.classList.add('is-revealed'));
+        return;
+      }
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-revealed');
+              io.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      );
+      els.forEach((el) => io.observe(el));
+    };
+    reveal();
+    document.addEventListener('astro:page-load', reveal);
+  </script>
+</Layout>

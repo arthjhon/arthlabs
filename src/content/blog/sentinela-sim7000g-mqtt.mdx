@@ -1,0 +1,24 @@
+---
+title: "Conectividade celular no Sentinela com SIM7000G e MQTT over LTE"
+excerpt: "Como substituímos o Wi-Fi por LTE Cat-M1 em ambiente estuarino sem cobertura — configuração AT commands, reconexão automática e keep-alive MQTT."
+tags: [IoT, MQTT, ESP32]
+date: 2026-04-15
+---
+
+## Por que trocamos de Wi-Fi para LTE
+
+O ponto de medição fica a ~1.5 km da estação mais próxima com energia e Wi-Fi. Tentar puxar cabo ou colocar ponto-a-ponto não fazia sentido para um nó que transmite poucos KB por hora.
+
+## AT commands essenciais
+
+```
+AT+CFUN=1
+AT+CNMP=38        // LTE only
+AT+CMNB=2         // Cat-M1
+AT+CSTT="<apn>"
+AT+CIICR
+```
+
+## Reconexão e keep-alive
+
+O firmware assume que a conexão cai. O loop principal trata três estados: **rede**, **MQTT**, **envio**. Cada um tem sua própria máquina de retry com backoff exponencial.

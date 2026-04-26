@@ -1,0 +1,27 @@
+---
+const links = [
+  { label: 'github', href: 'https://github.com/arthlabs', handle: '@arthlabs' },
+  { label: 'email', href: 'mailto:contato@arthlabs.dev', handle: 'contato@arthlabs.dev' },
+  { label: 'linkedin', href: 'https://www.linkedin.com/in/arthurjhonathas', handle: 'arthurjhonathas' },
+  { label: 'teranex', href: 'https://teranex.inf.br', handle: 'teranex.inf.br' },
+];
+---
+
+<section class="contact-cta" data-reveal>
+  <div class="contact-prompt">$ contact --reach-out</div>
+  <h2 class="contact-headline">
+    Tem um projeto de <span class="accent">infra</span>, <span class="accent2">automação</span> ou <span class="accent">IoT</span>?
+  </h2>
+  <p class="contact-sub">
+    Posso ajudar com homelab, monitoramento, integrações ou só trocar uma ideia.
+  </p>
+  <div class="contact-grid">
+    {links.map((l) => (
+      <a class="contact-link" href={l.href} target="_blank" rel="noopener">
+        <div class="contact-link-label">// {l.label}</div>
+        <div class="contact-link-handle">{l.handle}</div>
+        <span class="contact-link-arrow">↗</span>
+      </a>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,19 @@
+---
+title: "CI/CD para projetos pessoais em VPS com GitHub Actions"
+excerpt: "Pipeline completo: autenticação SSH, NVM PATH em sessões não-interativas, Docker Compose e rollback automático em caso de falha."
+tags: [DevOps, CI/CD, Docker]
+date: 2026-03-20
+---
+
+## O problema do PATH em shells não-interativos
+
+`nvm` vive num shell interativo. Quando o GitHub Actions abre SSH e roda comandos direto, o PATH não tem `node`. A solução é carregar o nvm explicitamente:
+
+```bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+```
+
+## Rollback
+
+Antes de subir a nova versão, a pipeline tagueia a imagem anterior como `previous`. Se o healthcheck falha, `docker compose` sobe a `previous` de volta.

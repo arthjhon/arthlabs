@@ -1,0 +1,39 @@
+---
+title: "TermSign"
+description: "Aplicação web para geração, assinatura e arquivamento de Termos de Responsabilidade de equipamentos corporativos — multi-empresa, com PDF dinâmico e histórico rastreável."
+tags: [React, TypeScript, Vite, TailwindCSS, "@react-pdf/renderer"]
+status: active
+github: ""
+demo: ""
+writeup: "included"
+date: 2026-03-10
+featured: true
+---
+
+## Contexto
+
+Equipes de TI, DP e patrimônio que entregam notebooks, celulares e outros ativos aos colaboradores costumam formalizar isso em **planilhas e documentos Word soltos** — sem histórico consistente, sem rastreabilidade, e com risco de perder a versão assinada.
+
+O **TermSign** substitui esse fluxo por uma aplicação unificada: você cadastra a empresa, o responsável, o colaborador e os equipamentos, gera o PDF profissional, imprime/assina, digitaliza e anexa de volta. Tudo fica arquivado e buscável.
+
+## Principais recursos
+
+- **Gestão multi-empresa** — cadastre empresas (presets) com múltiplos emitentes vinculados a cada uma
+- **Geração de PDF** — termos profissionais em PDF via `@react-pdf/renderer`, com layout padronizado e dados dinâmicos
+- **Arquivo histórico** — todos os termos emitidos com busca integrada; regeneração funciona mesmo após exclusão do preset original graças ao **snapshot dos dados** no momento da emissão
+- **Anexo de PDF assinado** — upload do documento físico digitalizado, mantendo histórico digital completo
+- **UX moderna** — React 19 + TailwindCSS 4, com foco na agilidade do dia a dia
+
+## Decisão de arquitetura: snapshot vs referência
+
+Os termos históricos **não referenciam** os presets atuais — eles guardam uma cópia dos dados no momento da emissão. Isso resolve o problema clássico de "editar a empresa X quebra o termo de 6 meses atrás". A pena de pagar é um pouco de duplicação de dados; o ganho é integridade histórica garantida.
+
+## Stack
+
+- **Frontend:** React 19, TypeScript, Vite
+- **Estilização:** TailwindCSS 4
+- **Geração de PDF:** `@react-pdf/renderer`
+
+## Caso de uso
+
+Equipes de TI, DP e patrimônio que precisam formalizar a entrega de ativos aos colaboradores — substituindo planilhas e documentos Word soltos por um fluxo unificado e rastreável.

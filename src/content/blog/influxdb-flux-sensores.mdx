@@ -1,0 +1,17 @@
+---
+title: "InfluxDB 2.x e Flux: queries para dados de sensores em tempo real"
+excerpt: "Por que migramos de InfluxQL para Flux e como estruturamos as queries de temperatura, pH e turbidez no Projeto Sentinela."
+tags: [InfluxDB, IoT, Grafana]
+date: 2026-02-08
+---
+
+## Flux em uma linha
+
+```
+from(bucket: "sentinela")
+  |> range(start: -24h)
+  |> filter(fn: (r) => r._measurement == "water" and r._field == "ph")
+  |> aggregateWindow(every: 10m, fn: mean)
+```
+
+Mais verboso que InfluxQL, mas a composição por pipes compensa.

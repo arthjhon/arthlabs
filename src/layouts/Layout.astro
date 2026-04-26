@@ -1,0 +1,85 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '@fontsource/sora/300.css';
+import '@fontsource/sora/400.css';
+import '@fontsource/sora/600.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '@fontsource/jetbrains-mono/700.css';
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = 'arThLabs — personal lab & dev portfolio',
+  description = 'Projetos pessoais em IoT, software e infra — experimentação antes de produção.',
+  image = '/og-default.svg',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString().replace(/\/$/, '') || Astro.site!.toString();
+const ogImage = new URL(image, Astro.site).toString();
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:site_name" content="arThLabs" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="pt_BR" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <meta name="theme-color" content="#080b0f" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title="arThLabs blog" href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <title>{title}</title>
+
+    <script is:inline>
+      (function () {
+        try {
+          const stored = localStorage.getItem('theme');
+          const prefers = window.matchMedia('(prefers-color-scheme: light)').matches;
+          const theme = stored || (prefers ? 'light' : 'dark');
+          document.documentElement.dataset.theme = theme;
+        } catch (_) {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
+    <ClientRouter />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">pular para o conteúdo</a>
+    <div class="site-wrapper">
+      <Nav />
+      <main id="main">
+        <slot />
+      </main>
+      <Footer />
+    </div>
+    <!-- Cloudflare Web Analytics -->
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "c7b221d32ae74188b1ae6f5997b38eaf"}'></script>
+    <!-- End Cloudflare Web Analytics -->
+  </body>
+</html>

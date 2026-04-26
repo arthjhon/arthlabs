@@ -1,0 +1,19 @@
+---
+const { pathname } = Astro.url;
+const isActive = (path: string) =>
+  path === '/' ? pathname === '/' : pathname.startsWith(path);
+---
+
+<nav>
+  <a class="nav-logo" href="/">arTh<span>Labs</span></a>
+  <ul class="nav-links">
+    <li><a href="/" class={isActive('/') ? 'active' : ''}>~/home</a></li>
+    <li><a href="/projects" class={isActive('/projects') ? 'active' : ''}>~/projects</a></li>
+    <li><a href="/blog" class={isActive('/blog') ? 'active' : ''}>~/blog</a></li>
+    <li><a href="/about" class={isActive('/about') ? 'active' : ''}>~/about</a></li>
+  </ul>
+  <div class="nav-status">
+    <div class="status-dot"></div>
+    <span>Maceió, BR</span>
+  </div>
+</nav>

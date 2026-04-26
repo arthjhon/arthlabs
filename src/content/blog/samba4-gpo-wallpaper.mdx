@@ -1,0 +1,20 @@
+---
+title: "Samba4 AD + GPO: deploy de wallpaper corporativo via política de grupo"
+excerpt: "Configuração de Samba4 como DC para lab/universitário — DNS, functional level upgrade e GPO de wallpaper passo a passo."
+tags: [Infra, Samba4, AD]
+date: 2026-01-14
+---
+
+## Provisionar o domínio
+
+```bash
+samba-tool domain provision \
+  --use-rfc2307 \
+  --realm=LAB.ARTHLABS.DEV \
+  --domain=LAB \
+  --server-role=dc
+```
+
+## GPO de wallpaper
+
+A GPO aponta para `\\dc\netlogon\wallpaper.bmp`. O caminho **precisa** ser UNC — caminho local não funciona.

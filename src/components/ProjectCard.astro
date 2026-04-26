@@ -1,0 +1,36 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  tags: string[];
+  status: 'active' | 'wip' | 'archived';
+  github?: string;
+  demo?: string;
+  writeup?: string;
+  slug?: string;
+}
+
+const { title, description, tags, status, github, demo, writeup, slug } = Astro.props;
+const hasPage = !!slug;
+---
+
+<article class={`project-card ${hasPage ? 'linkable' : ''}`}>
+  <div class={`card-status ${status}`}>
+    <div class="dot"></div>
+    {status}
+  </div>
+  {hasPage ? (
+    <a href={`/projects/${slug}`} class="card-title" style="color: var(--text);">{title}</a>
+  ) : (
+    <div class="card-title">{title}</div>
+  )}
+  <div class="card-desc">{description}</div>
+  <div class="card-tags">
+    {tags.map((t) => <span class="card-tag">{t}</span>)}
+  </div>
+  <div class="card-links">
+    {github && <a class="card-link" href={github} target="_blank" rel="noopener">⌥ GitHub</a>}
+    {demo && <a class="card-link" href={demo} target="_blank" rel="noopener">↗ demo</a>}
+    {writeup && hasPage && <a class="card-link" href={`/projects/${slug}`}>⌗ write-up</a>}
+  </div>
+</article>

@@ -1,0 +1,31 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import BlogItem from '../../components/BlogItem.astro';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+---
+
+<Layout title="Blog · arThLabs" description="Posts técnicos sobre IoT, DevOps e infraestrutura.">
+  <section class="page">
+    <div class="section-header" style="margin-bottom: 8px;">
+      <span class="section-label">blog técnico</span>
+      <div class="section-line"></div>
+    </div>
+    <p class="term-line">$ grep -r "tag:IoT\|tag:DevOps\|tag:Infra" ~/arthlabs/blog/ <span class="caret">▎</span></p>
+
+    <div class="blog-list">
+      {posts.map((p) => (
+        <BlogItem
+          title={p.data.title}
+          excerpt={p.data.excerpt}
+          date={p.data.date}
+          tags={p.data.tags}
+          slug={p.id}
+        />
+      ))}
+    </div>
+  </section>
+</Layout>

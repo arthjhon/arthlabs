@@ -1,0 +1,27 @@
+---
+title: "Projeto Sentinela"
+description: "Sistema de monitoramento de qualidade da água em estuários com ESP32, sensores ambientais e pipeline MQTT → InfluxDB → Grafana."
+tags: [ESP32, MQTT, InfluxDB, IoT, SIM7000G, Grafana]
+status: active
+github: "https://github.com/arthjhon/projeto-sentinela"
+demo: "https://sentinela.teranex.inf.br"
+writeup: "included"
+date: 2026-01-15
+featured: true
+---
+
+## Contexto
+
+O Sentinela monitora **pH, turbidez, temperatura e condutividade** da água em estuários da costa alagoana. A ideia começou como um projeto de iniciação científica e evoluiu para uma plataforma de telemetria com conectividade celular.
+
+## Arquitetura
+
+- **Sensores** conectados a um ESP32
+- **Conectividade** via SIM7000G (LTE Cat-M1) onde não há Wi-Fi
+- **Transporte** MQTT over TLS
+- **Armazenamento** InfluxDB 2.x
+- **Visualização** Grafana
+
+## Desafios
+
+Ambiente estuarino é hostil: umidade, maresia, ausência de energia e cobertura intermitente. Cada decisão de hardware/firmware precisa assumir falha e reconexão.

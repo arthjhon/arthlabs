@@ -1,0 +1,38 @@
+---
+interface Item {
+  status: 'building' | 'learning' | 'running';
+  text: string;
+}
+
+const items: Item[] = [
+  { status: 'building', text: 'Sentinela — telemetria celular SIM7000G + MQTT' },
+  { status: 'building', text: 'TeraNex Vault — armazenamento seguro para PMEs' },
+  { status: 'running', text: 'Homelab Proxmox + pfSense + Zabbix em produção 24/7' },
+  { status: 'learning', text: 'Engenharia de Computação · Maceió/AL' },
+];
+
+const labelMap = {
+  building: 'building',
+  running: 'running',
+  learning: 'learning',
+};
+---
+
+<div class="now-card" data-reveal>
+  <div class="now-head">
+    <div class="now-dots">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="now-title">~/now</div>
+  </div>
+  <div class="now-body">
+    <div class="now-prompt">$ cat status.log</div>
+    {items.map((item) => (
+      <div class="now-line">
+        <span class={`now-status now-${item.status}`}>[{labelMap[item.status]}]</span>
+        <span class="now-text">{item.text}</span>
+      </div>
+    ))}
+    <div class="now-prompt now-cursor">$ <span class="cursor"></span></div>
+  </div>
+</div>

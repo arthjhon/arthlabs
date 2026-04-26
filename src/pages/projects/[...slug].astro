@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((p) => ({ params: { slug: p.id }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const date = project.data.date.toISOString().slice(0, 10);
+---
+
+<Layout title={`${project.data.title} · arThLabs`} description={project.data.description}>
+  <section class="page">
+    <article class="prose">
+      <a class="post-back" href="/projects">← todos os projetos</a>
+      <h1>{project.data.title}</h1>
+      <div class="post-meta">
+        <span><span class={`card-status ${project.data.status}`} style="display:inline-flex;"><span class="dot"></span> {project.data.status}</span></span>
+        <span>{date}</span>
+        {project.data.github && <a href={project.data.github} target="_blank" rel="noopener">⌥ GitHub</a>}
+        {project.data.demo && <a href={project.data.demo} target="_blank" rel="noopener">↗ demo</a>}
+      </div>
+      <div class="card-tags" style="margin-bottom: 24px;">
+        {project.data.tags.map((t: string) => <span class="card-tag">{t}</span>)}
+      </div>
+      <Content />
+    </article>
+  </section>
+</Layout>
