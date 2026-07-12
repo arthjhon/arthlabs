@@ -57,6 +57,7 @@ const ogImage = new URL(image, Astro.site).toString();
 
     <script is:inline>
       (function () {
+        document.documentElement.classList.add('js');
         try {
           const stored = localStorage.getItem('theme');
           const prefers = window.matchMedia('(prefers-color-scheme: light)').matches;
@@ -78,8 +79,9 @@ const ogImage = new URL(image, Astro.site).toString();
       </main>
       <Footer />
     </div>
-    <!-- Cloudflare Web Analytics -->
-    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "c7b221d32ae74188b1ae6f5997b38eaf"}'></script>
-    <!-- End Cloudflare Web Analytics -->
+    {/* Cloudflare Web Analytics — production only (avoids CORS noise in local dev) */}
+    {import.meta.env.PROD && (
+      <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "c7b221d32ae74188b1ae6f5997b38eaf"}'></script>
+    )}
   </body>
 </html>
