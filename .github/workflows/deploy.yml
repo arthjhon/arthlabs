@@ -1,33 +1,30 @@
-name: Deploy
+name: Deploy (production)
 
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
 
       - run: npm ci
       - run: npm run build
 
-      - name: Publish to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+      - name: Deploy Worker (production)
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: arthlabs-site
-          directory: dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          command: deploy
