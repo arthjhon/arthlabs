@@ -454,20 +454,45 @@ button { font: inherit; cursor: pointer; }
 
 .card-links {
   display: flex;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .card-link {
   font-family: var(--mono);
   font-size: 11px;
+  letter-spacing: 0.3px;
   color: var(--muted);
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  transition: color 0.15s;
+  gap: 6px;
+  padding: 5px 10px;
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  transition: color 0.15s, border-color 0.15s, background 0.15s, transform 0.1s;
 }
 
-.card-link:hover { color: var(--accent); }
+.card-link-icon { flex-shrink: 0; }
+
+.card-link:hover {
+  color: var(--accent);
+  border-color: rgba(0, 255, 136, 0.4);
+  background: var(--accent-dim);
+  transform: translateY(-1px);
+}
+
+/* primary = internal write-up (README) */
+.card-link.primary {
+  color: var(--accent);
+  border-color: rgba(0, 255, 136, 0.28);
+  background: var(--accent-dim);
+}
+
+.card-link.primary:hover {
+  border-color: var(--accent);
+  background: rgba(0, 255, 136, 0.14);
+}
 
 /* BLOG LIST */
 .blog-list {
