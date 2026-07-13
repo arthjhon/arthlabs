@@ -11,9 +11,6 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
     steps:
       - uses: actions/checkout@v4
 
@@ -25,10 +22,9 @@ jobs:
       - run: npm ci
       - run: npm run build
 
-      - name: Publish to Cloudflare Pages (production)
+      - name: Deploy Worker (production)
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          command: pages deploy dist --project-name=arthlabs-site --branch=main
+          command: deploy

@@ -18,5 +18,8 @@
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/sora": "^5.2.8",
     "astro": "^6.1.8"
+  },
+  "devDependencies": {
+    "wrangler": "^4.110.0"
   }
 }
