@@ -2,7 +2,11 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "arthlabs-site",
   "compatibility_date": "2026-07-01",
+  "main": "./src/worker/index.js",
   "assets": {
     "directory": "./dist"
-  }
+  },
+  "send_email": [
+    { "name": "SEB", "destination_address": "arthlabsinfbr@gmail.com" }
+  ]
 }
