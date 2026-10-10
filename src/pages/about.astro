@@ -9,7 +9,7 @@ import { t } from '../i18n/pt';
 const homelabEntries: MetaEntry[] = homelab.map((h) => ({ key: h.label, value: h.value }));
 ---
 
-<Layout title={`${t.about.title} · arThLabs`} description="Arthur Jhonathas — infraestrutura, SysAdmin, automação e IoT. Fundador da TeraNex Tecnologia.">
+<Layout title={`${t.about.title} · arThLabs`} description="Arthur Jhonathas — infraestrutura, SysAdmin, automação e IoT. Coordena o Projeto Sentinela.">
   <div class="container page">
     <header class="intro">
       <img class="photo" src="/images/arthur.webp" width="640" height="640" alt="" />
@@ -21,9 +21,15 @@ const homelabEntries: MetaEntry[] = homelab.map((h) => ({ key: h.label, value: h
 
     <div class="prose bio">
       <p>
-        Fundador da <strong>TeraNex Tecnologia</strong> — infraestrutura e suporte gerenciado para PMEs em Maceió/AL.
-        O <strong>arThLabs</strong> é onde experimento: projetos pessoais em IoT, software, automação e infra que não
-        cabem no portfólio da empresa mas ensinam muito.
+        Graduando em Engenharia da Computação, com mais de três anos em infraestrutura de TI: do suporte técnico ao
+        projeto, à implantação e à operação de redes, firewalls, servidores e serviços em ambientes institucionais em
+        produção. Trabalho com pfSense/OPNsense e UniFi (VLANs, VPNs, 802.1X), Proxmox, Linux e Windows Server, Active
+        Directory, Docker, Zabbix/Grafana e automação em Python.
+      </p>
+      <p>
+        Coordeno o <a href="/projects/sentinela">Projeto Sentinela</a>, plataforma IoT de monitoramento da qualidade da
+        água da qual projetei e mantenho a arquitetura. O <strong>arThLabs</strong> é o laboratório onde experimento,
+        homelab incluído: o que não cabe no trabalho institucional mas ensina muito.
       </p>
     </div>
 

@@ -16,7 +16,6 @@ export const links: Link[] = [
   { label: 'GitHub', handle: '@arthjhon', href: 'https://github.com/arthjhon', icon: 'github' },
   { label: 'LinkedIn', handle: 'arthurjhonathas', href: 'https://www.linkedin.com/in/arthurjhonathas', icon: 'linkedin' },
   { label: 'Instagram', handle: '@arth.dev_', href: 'https://instagram.com/arth.dev_', icon: 'instagram' },
-  { label: 'TeraNex', handle: 'teranex.inf.br', href: 'https://teranex.inf.br', icon: 'globe' },
   { label: 'Email', handle: 'contato@arthlabs.dev', href: 'mailto:contato@arthlabs.dev', icon: 'mail' },
 ];
 
