@@ -6,11 +6,9 @@ export interface NowItem {
 }
 
 /** Update by hand; bump nowUpdated whenever the list changes. */
-export const nowUpdated = '2026-10';
-
 export const now: NowItem[] = [
-  { kind: 'building', text: 'Sentinela — telemetria celular SIM7000G + MQTT' },
-  { kind: 'building', text: 'TeraNex Vault — armazenamento seguro para PMEs' },
+  { kind: 'building', text: 'Sentinela — calibração dos sensores, caixa estanque e piloto na Lagoa Mundaú (out–nov/2026)' },
+  { kind: 'building', text: 'Artigo científico sobre o Sentinela — reta final para publicação' },
   { kind: 'running', text: 'Homelab Proxmox + pfSense + Zabbix em produção 24/7' },
-  { kind: 'learning', text: 'Engenharia de Computação · Maceió/AL' },
+  { kind: 'learning', text: 'Engenharia da Computação — 10º período, conclusão em dez/2026 · CCNA em andamento' },
 ];
