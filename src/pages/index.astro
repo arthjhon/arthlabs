@@ -6,6 +6,7 @@ import BlogItem from '../components/BlogItem.astro';
 import Skills from '../components/Skills.astro';
 import NowBuilding from '../components/NowBuilding.astro';
 import ContactCTA from '../components/ContactCTA.astro';
+import HomelabDiagram from '../components/HomelabDiagram.astro';
 
 const allProjects = await getCollection('projects');
 const featured = allProjects
@@ -26,6 +27,7 @@ const stats = {
 ---
 
 <Layout>
+  <HomelabDiagram />
   <section class="hero-section">
     <div class="grid-bg"></div>
     <div class="hero-glow"></div>

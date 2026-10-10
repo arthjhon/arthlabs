@@ -1,0 +1,129 @@
+---
+import { t } from '../i18n/pt';
+
+type NodeKey = keyof typeof t.diagram;
+interface Node { key: NodeKey; x: number; y: number }
+
+const W = 128; // node width
+const H = 34;  // node height
+
+// Full variant — viewBox 520 × 420
+const full: Node[] = [
+  { key: 'internet', x: 12, y: 16 },
+  { key: 'firewall', x: 196, y: 16 },
+  { key: 'mgmt', x: 12, y: 116 },
+  { key: 'servers', x: 196, y: 116 },
+  { key: 'iot', x: 380, y: 116 },
+  { key: 'hypervisor', x: 196, y: 216 },
+  { key: 'sensors', x: 380, y: 216 },
+  { key: 'observability', x: 12, y: 316 },
+  { key: 'services', x: 196, y: 316 },
+  { key: 'mqtt', x: 380, y: 316 },
+];
+
+const at = (nodes: Node[], k: NodeKey) => nodes.find((n) => n.key === k)!;
+const cx = (n: Node) => n.x + W / 2;
+const cy = (n: Node) => n.y + H / 2;
+
+const F = (k: NodeKey) => at(full, k);
+const fullEdges: string[] = [
+  `M${F('internet').x + W} ${cy(F('internet'))} H${F('firewall').x}`,
+  `M${cx(F('firewall'))} ${F('firewall').y + H} V${F('servers').y}`,
+  `M${cx(F('firewall'))} ${F('firewall').y + H + 24} H${cx(F('mgmt'))} V${F('mgmt').y}`,
+  `M${cx(F('firewall'))} ${F('firewall').y + H + 24} H${cx(F('iot'))} V${F('iot').y}`,
+  `M${cx(F('servers'))} ${F('servers').y + H} V${F('hypervisor').y}`,
+  `M${cx(F('hypervisor'))} ${F('hypervisor').y + H} V${F('services').y}`,
+  `M${cx(F('iot'))} ${F('iot').y + H} V${F('sensors').y}`,
+  `M${cx(F('sensors'))} ${F('sensors').y + H} V${F('mqtt').y}`,
+  `M${F('services').x} ${cy(F('services'))} H${F('observability').x + W}`,
+  `M${cx(F('mqtt'))} ${F('mqtt').y + H} V${F('mqtt').y + H + 30} H${cx(F('observability'))} V${F('observability').y + H}`,
+];
+// Animated "packet" routes (pathLength-normalised dashes)
+const fullFlows: string[] = [
+  `M${F('internet').x + W} ${cy(F('internet'))} H${cx(F('firewall'))} V${F('services').y}`,
+  `M${cx(F('sensors'))} ${F('sensors').y + H} V${F('mqtt').y + H + 30} H${cx(F('observability'))} V${F('observability').y + H}`,
+];
+
+// Compact variant — viewBox 340 × 170
+const CW = 136;
+const compact: Node[] = [
+  { key: 'internet', x: 12, y: 12 },
+  { key: 'firewall', x: 192, y: 12 },
+  { key: 'iot', x: 12, y: 112 },
+  { key: 'servers', x: 192, y: 112 },
+];
+const C = (k: NodeKey) => at(compact, k);
+const ccx = (n: Node) => n.x + CW / 2;
+const compactEdges: string[] = [
+  `M${C('internet').x + CW} ${C('internet').y + H / 2} H${C('firewall').x}`,
+  `M${ccx(C('firewall'))} ${C('firewall').y + H} V${C('servers').y}`,
+  `M${ccx(C('firewall'))} ${C('firewall').y + H + 28} H${ccx(C('iot'))} V${C('iot').y}`,
+];
+const compactFlow = `M${C('internet').x + CW} ${C('internet').y + H / 2} H${ccx(C('firewall'))} V${C('servers').y}`;
+---
+
+<figure class="diagram">
+  <svg class="full" viewBox="0 0 520 420" role="img" aria-labelledby="dg-full-title dg-full-desc">
+    <title id="dg-full-title">{t.diagram.title}</title>
+    <desc id="dg-full-desc">{t.diagram.desc}</desc>
+    <g class="edges">{fullEdges.map((d) => <path d={d} />)}</g>
+    <g class="flows">{fullFlows.map((d, i) => <path d={d} pathLength="100" style={`animation-delay:${i * -2.5}s`} />)}</g>
+    <g class="nodes">
+      {full.map((n) => (
+        <g>
+          <rect x={n.x} y={n.y} width={W} height={H} rx="4" />
+          <text x={n.x + W / 2} y={n.y + H / 2}>{t.diagram[n.key]}</text>
+        </g>
+      ))}
+    </g>
+  </svg>
+
+  <svg class="compact" viewBox="0 0 340 170" role="img" aria-labelledby="dg-compact-title dg-compact-desc">
+    <title id="dg-compact-title">{t.diagram.title}</title>
+    <desc id="dg-compact-desc">{t.diagram.desc}</desc>
+    <g class="edges">{compactEdges.map((d) => <path d={d} />)}</g>
+    <g class="flows"><path d={compactFlow} pathLength="100" /></g>
+    <g class="nodes">
+      {compact.map((n) => (
+        <g>
+          <rect x={n.x} y={n.y} width={CW} height={H} rx="4" />
+          <text x={n.x + CW / 2} y={n.y + H / 2}>{t.diagram[n.key]}</text>
+        </g>
+      ))}
+    </g>
+  </svg>
+</figure>
+
+<style>
+  .diagram { margin: 0 auto; max-width: 640px; }
+  svg { width: 100%; height: auto; overflow: visible; }
+  .full { display: none; }
+  @media (min-width: 960px) {
+    .full { display: block; }
+    .compact { display: none; }
+  }
+  .edges path { fill: none; stroke: var(--color-border); stroke-width: 1.5; }
+  .flows path {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 3 97;
+    stroke-dashoffset: 100;
+    animation: travel 5s linear infinite;
+  }
+  .nodes rect { fill: var(--color-surface); stroke: var(--color-border); stroke-width: 1; }
+  .nodes text {
+    fill: var(--color-text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-anchor: middle;
+    dominant-baseline: central;
+  }
+  @keyframes travel {
+    to { stroke-dashoffset: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flows path { animation: none; stroke-dasharray: none; stroke: var(--color-accent); opacity: 0.6; }
+  }
+</style>
