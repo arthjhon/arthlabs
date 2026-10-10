@@ -9,7 +9,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check": "astro check",
+    "test": "vitest run tests/unit",
+    "test:build": "astro build && vitest run tests/build"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.7",
@@ -21,6 +24,10 @@
     "mimetext": "^3.0.28"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "node-html-parser": "^9.0.4",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.3",
     "wrangler": "^4.110.0"
   }
 }
