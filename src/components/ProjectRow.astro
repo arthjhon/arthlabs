@@ -28,7 +28,7 @@ const links = projectLinks(project);
     <span class="year">{yearOf(date)}</span>
     {links.map((l) => (
       <a class="ext" href={l.href} target="_blank" rel="noopener">
-        {t.meta[l.kind]}<span aria-hidden="true"> ↗</span>
+        {t.meta[l.kind]}<span aria-hidden="true"> ↗</span><span class="visually-hidden"> — {title}{t.meta.newTab}</span>
       </a>
     ))}
   </div>

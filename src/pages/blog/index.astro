@@ -22,7 +22,7 @@ const groups = groupByCategory(await getCollection('blog', ({ data }) => !data.d
         <section class="section" aria-labelledby={`cat-${g.category}`}>
           <div class="section-head">
             <h2 class="section-title" id={`cat-${g.category}`}>{t.category[g.category]}</h2>
-            <span class="eyebrow">{g.items.length}</span>
+            <span class="eyebrow" aria-hidden="true">{g.items.length}</span>
           </div>
           <PostList posts={g.items} />
         </section>

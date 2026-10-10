@@ -56,6 +56,7 @@ export const t = {
     updated: 'atualizado',
     category: 'categoria',
     toc: 'Nesta página',
+    newTab: ' (abre em nova aba)',
   },
   about: {
     title: 'Sobre',

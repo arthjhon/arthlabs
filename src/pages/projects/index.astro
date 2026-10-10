@@ -19,7 +19,7 @@ const groups = groupByStatus(await getCollection('projects'));
       <section class="section" aria-labelledby={`group-${g.status}`}>
         <div class="section-head">
           <h2 class="section-title" id={`group-${g.status}`}>{t.statusGroup[g.status]}</h2>
-          <span class="eyebrow">{g.items.length}</span>
+          <span class="eyebrow" aria-hidden="true">{g.items.length}</span>
         </div>
         <ProjectList projects={g.items} />
       </section>
