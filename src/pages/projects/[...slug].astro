@@ -1,6 +1,11 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import Prose from '../../components/Prose.astro';
+import MetaBlock, { type MetaEntry } from '../../components/MetaBlock.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import { isoDate, projectLinks } from '../../lib/content';
+import { t } from '../../i18n/pt';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -8,25 +13,27 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const { Content } = await render(project);
-const date = project.data.date.toISOString().slice(0, 10);
+const { Content, headings } = await render(project);
+const { title, description, tags, status, date, updated } = project.data;
+
+const entries: MetaEntry[] = [
+  ...(tags.length ? [{ key: t.meta.stack, value: tags.join(' · '), mono: true }] : []),
+  ...projectLinks(project).map((l) => ({
+    key: t.meta[l.kind],
+    value: l.href.replace(/^https?:\/\//, ''),
+    href: l.href,
+    mono: true,
+  })),
+  { key: t.meta.date, value: isoDate(date), mono: true },
+  ...(updated ? [{ key: t.meta.updated, value: isoDate(updated), mono: true }] : []),
+];
 ---
 
-<Layout title={`${project.data.title} · arThLabs`} description={project.data.description}>
-  <section class="page">
-    <article class="prose">
-      <a class="post-back" href="/projects">← todos os projetos</a>
-      <h1>{project.data.title}</h1>
-      <div class="post-meta">
-        <span><span class={`card-status ${project.data.status}`} style="display:inline-flex;"><span class="dot"></span> {project.data.status}</span></span>
-        <span>{date}</span>
-        {project.data.github && <a href={project.data.github} target="_blank" rel="noopener">⌥ GitHub</a>}
-        {project.data.demo && <a href={project.data.demo} target="_blank" rel="noopener">↗ demo</a>}
-      </div>
-      <div class="card-tags" style="margin-bottom: 24px;">
-        {project.data.tags.map((t: string) => <span class="card-tag">{t}</span>)}
-      </div>
-      <Content />
-    </article>
-  </section>
+<Layout title={`${title} · arThLabs`} description={description}>
+  <Prose title={title} backHref="/projects" backLabel={t.projects.back} headings={headings}>
+    <MetaBlock slot="meta" entries={entries}>
+      <StatusBadge slot="status" status={status} />
+    </MetaBlock>
+    <Content />
+  </Prose>
 </Layout>

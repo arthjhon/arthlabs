@@ -1,6 +1,10 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import Prose from '../../components/Prose.astro';
+import MetaBlock, { type MetaEntry } from '../../components/MetaBlock.astro';
+import { isoDate } from '../../lib/content';
+import { t } from '../../i18n/pt';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -8,20 +12,20 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
-const date = post.data.date.toISOString().slice(0, 10);
+const { Content, headings } = await render(post);
+const { title, excerpt, category, tags, date, updated } = post.data;
+
+const entries: MetaEntry[] = [
+  { key: t.meta.category, value: t.category[category] },
+  { key: t.meta.date, value: isoDate(date), mono: true },
+  ...(updated ? [{ key: t.meta.updated, value: isoDate(updated), mono: true }] : []),
+  ...(tags.length ? [{ key: 'tags', value: tags.join(' · '), mono: true }] : []),
+];
 ---
 
-<Layout title={`${post.data.title} · arThLabs`} description={post.data.excerpt}>
-  <section class="page">
-    <article class="prose">
-      <a class="post-back" href="/blog">← todos os posts</a>
-      <h1>{post.data.title}</h1>
-      <div class="post-meta">
-        <span>{date}</span>
-        {post.data.tags.map((t: string) => <span class="card-tag">{t}</span>)}
-      </div>
-      <Content />
-    </article>
-  </section>
+<Layout title={`${title} · arThLabs`} description={excerpt}>
+  <Prose title={title} backHref="/blog" backLabel={t.blog.back} headings={headings}>
+    <MetaBlock slot="meta" entries={entries} />
+    <Content />
+  </Prose>
 </Layout>

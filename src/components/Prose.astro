@@ -1,0 +1,61 @@
+---
+import type { MarkdownHeading } from 'astro';
+import { t } from '../i18n/pt';
+
+interface Props {
+  title: string;
+  backHref: string;
+  backLabel: string;
+  headings?: MarkdownHeading[];
+}
+
+const { title, backHref, backLabel, headings = [] } = Astro.props;
+const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+const showToc = toc.length >= 2;
+---
+
+<div class="container page reading">
+  <article>
+    <a class="back" href={backHref}>{backLabel}</a>
+    <h1 class="title">{title}</h1>
+    <div class="meta"><slot name="meta" /></div>
+    <div class="prose"><slot /></div>
+  </article>
+  {showToc && (
+    <nav class="toc" aria-label={t.meta.toc}>
+      <p class="eyebrow">{t.meta.toc}</p>
+      <ul>
+        {toc.map((h) => (
+          <li class={`d${h.depth}`}><a href={`#${h.slug}`}>{h.text}</a></li>
+        ))}
+      </ul>
+    </nav>
+  )}
+</div>
+
+<style>
+  .reading { display: grid; gap: var(--space-12); }
+  @media (min-width: 1200px) {
+    .reading { grid-template-columns: minmax(0, var(--measure)) 220px; justify-content: space-between; }
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+  .back:hover { color: var(--color-accent); }
+  .title { font-size: var(--text-2xl); margin-top: var(--space-2); letter-spacing: -0.01em; }
+  @media (min-width: 960px) { .title { font-size: var(--text-3xl); } }
+  .meta { margin-block: var(--space-6) var(--space-8); }
+  .toc { display: none; }
+  @media (min-width: 1200px) {
+    .toc { display: block; position: sticky; top: 84px; align-self: start; font-size: var(--text-sm); }
+  }
+  .toc ul { list-style: none; padding: 0; margin-top: var(--space-3); display: grid; gap: var(--space-2); }
+  .toc .d3 { padding-left: var(--space-3); }
+  .toc a { color: var(--color-muted); text-decoration: none; }
+  .toc a:hover { color: var(--color-accent); }
+</style>

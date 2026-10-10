@@ -1,0 +1,56 @@
+---
+export interface MetaEntry {
+  key: string;
+  value: string;
+  href?: string;
+  mono?: boolean;
+}
+
+interface Props {
+  entries: MetaEntry[];
+}
+
+const { entries } = Astro.props;
+const hasStatus = Astro.slots.has('status');
+---
+
+<dl class="meta-block">
+  {hasStatus && (
+    <div class="row">
+      <dt>status</dt>
+      <dd><slot name="status" /></dd>
+    </div>
+  )}
+  {entries.map((e) => (
+    <div class="row">
+      <dt>{e.key}</dt>
+      <dd class={e.mono ? 'mono' : undefined}>
+        {e.href ? (
+          <a href={e.href} target={e.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
+            {e.value}<span aria-hidden="true"> ↗</span>
+          </a>
+        ) : (
+          e.value
+        )}
+      </dd>
+    </div>
+  ))}
+</dl>
+
+<style>
+  .meta-block {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    font-size: var(--text-sm);
+  }
+  .row { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: var(--space-3); }
+  dt { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-muted); padding-top: 0.15em; }
+  dt::after { content: ':'; }
+  dd { overflow-wrap: anywhere; }
+  .mono { font-family: var(--font-mono); font-size: var(--text-xs); }
+  a { color: var(--color-accent); }
+</style>
