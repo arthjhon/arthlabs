@@ -134,7 +134,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   max-width: var(--measure);
 }
 .prose > * + * { margin-top: 1.1em; }
-.prose h2, .prose h3 { font-family: var(--font-sans); margin-top: 2em; scroll-margin-top: 80px; }
+.prose h2, .prose h3 { font-family: var(--font-sans); margin-top: 2em; scroll-margin-top: calc(var(--header-h) + var(--space-4)); }
 .prose h2 { font-size: var(--text-xl); }
 .prose h3 { font-size: var(--text-lg); }
 .prose a { color: var(--color-accent); text-decoration-color: currentColor; }
