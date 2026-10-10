@@ -1,27 +1,94 @@
 ---
 title: "Projeto Sentinela"
-description: "Sistema de monitoramento de qualidade da água em estuários com ESP32, sensores ambientais e pipeline MQTT → InfluxDB → Grafana."
-tags: [ESP32, MQTT, InfluxDB, IoT, SIM7000G, Grafana]
+description: "Bóia telemétrica de baixo custo (ESP32-S3, MQTT/TLS) e plataforma aberta para monitorar a qualidade da água no estuário Mundaú-Manguaba. Protótipo validado em bancada; piloto previsto."
+tags: [ESP32-S3, MQTT, InfluxDB, Telegraf, Supabase, React, IoT, OTA]
 status: active
 github: "https://github.com/arthjhon/projeto-sentinela"
-demo: "https://sentinela.teranex.inf.br"
+demo: "https://sentinela.arthlabs.dev"
 writeup: "included"
-date: 2026-01-15
+date: 2026-04-01
+updated: 2026-09-26
 featured: true
 ---
 
 ## Contexto
 
-O Sentinela monitora **pH, turbidez, temperatura e condutividade** da água em estuários da costa alagoana. A ideia começou como um projeto de iniciação científica e evoluiu para uma plataforma de telemetria com conectividade celular.
+O Complexo Estuarino-Lagunar Mundaú-Manguaba (Maceió/AL) sustenta de 1,5 a 3 mil famílias do sururu e teve mortandades recorrentes entre 2022 e 2024. Não existe série contínua e pública dos parâmetros que ajudam a explicar esses eventos: o monitoramento oficial é trimestral/mensal ou semanal e sem oxigênio dissolvido e salinidade.
 
-## Arquitetura
+O Sentinela é uma bóia telemétrica de baixo custo (pH, turbidez, temperatura) somada a uma plataforma web aberta, com portal público e painel administrativo. Código sob licença MIT. O escopo é triagem ambiental, não enquadramento legal. Nasceu no Projeto Integrador I de Engenharia da Computação na UMJ, e eu faço a coordenação técnica.
 
-- **Sensores** conectados a um ESP32
-- **Conectividade** via SIM7000G (LTE Cat-M1) onde não há Wi-Fi
-- **Transporte** MQTT over TLS
-- **Armazenamento** InfluxDB 2.x
-- **Visualização** Grafana
+## Status
 
-## Desafios
+Honesto, em 26/09/2026:
 
-Ambiente estuarino é hostil: umidade, maresia, ausência de energia e cobertura intermitente. Cada decisão de hardware/firmware precisa assumir falha e reconexão.
+- **Protótipo validado em bancada** com água real: cerca de 54 mil leituras do primeiro nó, de mai a jul/2026.
+- **Plataforma em produção**, com cadastro dinâmico de bóias.
+- **Piloto em campo previsto** para a Lagoa Mundaú. Ainda não houve implantação na lagoa.
+- Sensores **ainda sem calibração**: nenhum valor da bancada deve ser lido como resultado.
+
+## Hardware
+
+- **MCU:** Heltec WiFi LoRa 32 V3 (ESP32-S3), que substituiu o ESP32 DevKit em set/2026. O nó original deixou de transmitir em 08/07.
+- **Sensores:** pH, turbidez e temperatura (DS18B20), com divisor de tensão e filtro por canal analógico.
+- **Planejados, não implementados:** oxigênio dissolvido e condutividade/salinidade.
+- **Firmware v5:** modular, uma tarefa FreeRTOS por sensor, sobreamostragem e média móvel, reconexão com backoff e mensagem de última vontade (LWT) retida.
+- **Caixa:** gabinete paramétrico impresso em 3D (ASA), 133 × 80 × 76 mm, parede de 5 mm, vedação por o-ring, 6 prensa-cabos (2 reservados para os sensores planejados) e respiro de membrana. Nível de proteção de campo simplificado, sem pretensão de IP67 certificado. O teste de imersão ainda está previsto.
+
+## Pipeline
+
+```text
+nó ESP32-S3 → MQTT/TLS → broker gerenciado ─┬→ Telegraf → InfluxDB 2.7   (histórico)
+                                            └→ navegador via WebSocket   (tempo real)
+```
+
+- Dois caminhos independentes: o tempo real no navegador não depende do servidor, e o histórico é ingerido de forma declarativa pelo Telegraf.
+- O histórico chega ao navegador por um proxy no servidor que mantém o token do InfluxDB fora do cliente.
+- **Supabase self-hosted** (Postgres, autenticação, Edge Functions) com RLS para papéis e auditoria.
+- **SPA React** com portal público (índice de qualidade, semáforo por faixas, mapa) e painel admin (histórico, CSV, manutenção, calibração, OTA).
+- Não há backend próprio no caminho do dado.
+
+<img
+  src="/images/projects/sentinela/mapa.png"
+  alt="Mapa do portal do Sentinela com um ponto ativo e dois pontos de expansão planejados na região da Lagoa Mundaú"
+  width="1052"
+  height="766"
+  loading="lazy"
+  decoding="async"
+/>
+
+*Mapa do portal: 1 protótipo ativo e 2 pontos de expansão planejados.*
+
+## OTA
+
+Atualização de firmware pelo ar com origem autorizada, HTTPS verificado, checagem de SHA-256 e do chip de destino. Se a verificação falha, o nó mantém o firmware atual. O teste ponta a ponta ainda está pendente.
+
+## Infraestrutura
+
+- VM institucional da UMJ atrás de **Cloudflare Tunnel**, sem portas abertas na borda.
+- **CD** por GitHub Actions + rsync.
+- **Failover estático:** uma cópia do portal público fica no GitHub Pages e é servida por um Cloudflare Worker se a VM cair.
+- O servidor anterior foi mantido congelado por um período para rollback da migração.
+
+## Decisões
+
+- **Sensores baratos com calibração local contra referência.** O valor está na densidade espacial e na continuidade da série, não em substituir uma sonda de referência.
+- **Sem backend próprio.** Ingestão declarativa (Telegraf) e Supabase para autenticação e RLS reduzem o custo operacional.
+- **Tempo real separado da persistência.** Assim o painel ao vivo sobrevive à queda do servidor.
+- **Failover estático.** A VM tem disco único; o portal público precisa continuar no ar mesmo assim.
+- **Túnel em vez de port-forward.** Menor superfície exposta.
+- **Medir as peças reais antes de fechar a caixa.** O paquímetro derrubou quatro suposições da especificação; a parede passou de 3 para 5 mm por causa da porosidade da impressão FDM.
+- **Migrar para ESP32-S3.** Ganha OLED de diagnóstico e LoRa; o custo é recalibrar o ADC, porque as constantes do ESP32 clássico não valem no S3.
+
+## Próximos passos
+
+- Calibração dos sensores, incluindo água salobra.
+- Impressão e teste de estanqueidade da caixa.
+- OTA ponta a ponta.
+- Alertas por webhook e energia solar.
+- Piloto na Lagoa Mundaú (out–nov/2026), com operação assistida.
+
+## Equipe e artigo
+
+Projeto Integrador I, Engenharia da Computação, UMJ. Equipe: Anwar Costa, Arthur Jhonathas (coordenação técnica), Luiz Lima, Marcos Silva, Maycon Fidelis e Pedro Oliveira.
+
+Estamos escrevendo um artigo científico sobre o Sentinela, em reta final para publicação.
