@@ -12,7 +12,8 @@
     "astro": "astro",
     "check": "astro check",
     "test": "vitest run tests/unit",
-    "test:build": "astro build && vitest run tests/build"
+    "test:build": "astro build && vitest run tests/build",
+    "check:content": "node scripts/check-content.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.7",
