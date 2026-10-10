@@ -6,6 +6,8 @@ export interface NowItem {
 }
 
 /** Update by hand; bump nowUpdated whenever the list changes. */
+export const nowUpdated = '2026-10';
+
 export const now: NowItem[] = [
   { kind: 'building', text: 'Sentinela — calibração dos sensores, caixa estanque e piloto na Lagoa Mundaú (out–nov/2026)' },
   { kind: 'building', text: 'Artigo científico sobre o Sentinela — reta final para publicação' },
