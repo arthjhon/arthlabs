@@ -32,7 +32,29 @@ Situação em 26/09/2026:
 - **Sensores:** pH, turbidez e temperatura (DS18B20), com divisor de tensão e filtro por canal analógico.
 - **Planejados, não implementados:** oxigênio dissolvido e condutividade/salinidade.
 - **Firmware v5:** modular, uma tarefa FreeRTOS por sensor, sobreamostragem e média móvel, reconexão com backoff e mensagem de última vontade (LWT) retida.
-- **Caixa:** gabinete paramétrico impresso em 3D (ASA), 133 × 80 × 76 mm, parede de 5 mm, vedação por o-ring, 6 prensa-cabos (2 reservados para os sensores planejados) e respiro de membrana. Nível de proteção de campo simplificado, sem pretensão de IP67 certificado. O teste de imersão ainda está previsto.
+
+## Caixa estanque
+
+Gabinete paramétrico modelado no Fusion 360 e impresso em 3D (ASA): 133 × 80 × 76 mm, parede de 5 mm, vedação por o-ring, tampa presa por 8 insertos M3, 6 prensa-cabos (2 reservados para os sensores planejados) e respiro de membrana. Todo o modelo é dirigido por parâmetros: trocar a dimensão de um componente e reexecutar os scripts reconstrói a peça inteira. Nível de proteção de campo simplificado, sem pretensão de IP67 certificado. O teste de imersão ainda está previsto.
+
+<div class="gallery">
+<figure>
+<img src="/images/projects/sentinela/caixa-vedacao.webp" alt="Render da caixa com o canal do o-ring na borda e a tampa posicionada" width="866" height="650" loading="lazy" decoding="async" />
+<figcaption>Canal do o-ring e tampa presa por insertos M3.</figcaption>
+</figure>
+<figure>
+<img src="/images/projects/sentinela/caixa-bandeja.webp" alt="Render da caixa aberta mostrando a bandeja interna sobre trilhos" width="1098" height="824" loading="lazy" decoding="async" />
+<figcaption>Bandeja interna removível sobre trilhos moldados no corpo.</figcaption>
+</figure>
+<figure>
+<img src="/images/projects/sentinela/caixa-passagens.webp" alt="Render da caixa com os furos dos prensa-cabos e do passa-muro" width="1200" height="900" loading="lazy" decoding="async" />
+<figcaption>Passagens: prensa-cabos M12, respiro de membrana e passa-muro BNC do eletrodo de pH.</figcaption>
+</figure>
+<figure>
+<img src="/images/projects/sentinela/caixa-olhais.webp" alt="Render da caixa fechada com olhais externos nas paredes curtas" width="986" height="740" loading="lazy" decoding="async" />
+<figcaption>Versão atual: olhais externos para o cabo de segurança, que substituíram furos passantes sem abrir a parede.</figcaption>
+</figure>
+</div>
 
 ## Pipeline
 
@@ -92,6 +114,6 @@ Atualização de firmware pelo ar com origem autorizada, HTTPS verificado, checa
 
 ## Equipe e artigo
 
-Projeto Integrador I, Engenharia da Computação, UMJ. Equipe: Anwar Costa, Arthur Jhonathas (coordenação técnica), Luiz Lima, Marcos Silva, Maycon Fidelis e Pedro Oliveira.
+Projeto Integrador I, Engenharia da Computação, UMJ. Equipe: Anwar Quirino, Arthur Jhonathas, Luiz Henrique, Marcos Paulo, Maycon Fidelis e Pedro Henrique.
 
 Estamos escrevendo um artigo científico sobre o Sentinela, em reta final para publicação.
