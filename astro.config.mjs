@@ -6,7 +6,11 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://arthlabs.dev',
   trailingSlash: 'never',
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    // links.astro is canonical at links.arthlabs.dev, not under this site.
+    sitemap({ filter: (page) => !/\/links\/?$/.test(page) }),
+  ],
   markdown: {
     shikiConfig: {
       theme: 'github-dark-dimmed',

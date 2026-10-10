@@ -14,15 +14,22 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
+  /** Absolute canonical URL; defaults to Astro.site + pathname. */
+  canonical?: string;
+  /** Standalone page: no nav, no footer (e.g. links.arthlabs.dev). */
+  bare?: boolean;
 }
 
 const {
   title = 'arThLabs — personal lab & dev portfolio',
   description = 'Projetos pessoais em IoT, software e infra — experimentação antes de produção.',
   image = '/og-default.svg',
+  bare = false,
 } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site).toString().replace(/\/$/, '') || Astro.site!.toString();
+const canonical =
+  Astro.props.canonical ??
+  (new URL(Astro.url.pathname, Astro.site).toString().replace(/\/$/, '') || Astro.site!.toString());
 const ogImage = new URL(image, Astro.site).toString();
 ---
 
@@ -73,11 +80,11 @@ const ogImage = new URL(image, Astro.site).toString();
   <body>
     <a href="#main" class="skip-link">pular para o conteúdo</a>
     <div class="site-wrapper">
-      <Nav />
+      {!bare && <Nav />}
       <main id="main">
         <slot />
       </main>
-      <Footer />
+      {!bare && <Footer />}
     </div>
     {/* Cloudflare Web Analytics — production only (avoids CORS noise in local dev) */}
     {import.meta.env.PROD && (

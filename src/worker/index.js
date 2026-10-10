@@ -1,14 +1,29 @@
 import { EmailMessage } from 'cloudflare:email';
 import { createMimeMessage, Mailbox } from 'mimetext/browser';
 
-const TO = 'arthlabsinfbr@gmail.com';
+const TO = 'contato@arthlabs.dev';
 const FROM = 'noreply@arthlabs.dev';
 const MAX_NAME = 200;
 const MAX_MESSAGE = 5000;
 
+const MAIN_HOST = 'arthlabs.dev';
+const LINKS_HOST = 'links.arthlabs.dev';
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    if (url.hostname === `www.${MAIN_HOST}`) {
+      return redirect(`https://${MAIN_HOST}${url.pathname}${url.search}`);
+    }
+
+    if (url.hostname === LINKS_HOST) {
+      return handleLinksHost(request, env, url);
+    }
+
+    if (url.pathname === '/links' || url.pathname === '/links/') {
+      return redirect(`https://${LINKS_HOST}/`);
+    }
 
     if (url.pathname === '/api/contact') {
       if (request.method !== 'POST') {
@@ -17,9 +32,30 @@ export default {
       return handleContact(request, env);
     }
 
-    return new Response('Not found', { status: 404 });
+    return env.ASSETS.fetch(request);
   },
 };
+
+// links.arthlabs.dev serves only the links page and the static files it
+// needs; any other path belongs to the main site.
+function handleLinksHost(request, env, url) {
+  if (url.pathname === '/') {
+    return env.ASSETS.fetch(new Request(new URL('/links/', url), request));
+  }
+  if (isStaticFile(url.pathname)) {
+    return env.ASSETS.fetch(request);
+  }
+  return redirect(`https://${MAIN_HOST}${url.pathname}${url.search}`);
+}
+
+function isStaticFile(pathname) {
+  // /_astro/*.css, /images/*.webp, /favicon.svg, …
+  return /\/[^/]+\.[a-z0-9]+$/i.test(pathname);
+}
+
+function redirect(location) {
+  return new Response(null, { status: 301, headers: { location } });
+}
 
 async function handleContact(request, env) {
   const wantsJson = (request.headers.get('content-type') || '').includes('application/json');
