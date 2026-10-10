@@ -1,0 +1,72 @@
+/* Design tokens. Components consume only these variables — never raw hex. */
+
+:root {
+  color-scheme: light dark;
+
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --text-xs: 0.8rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5625rem;
+  --text-2xl: 1.953rem;
+  --text-3xl: 2.441rem;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+
+  --radius: 6px;
+  --container: 1100px;
+  --measure: 68ch;
+  --dur: 180ms;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Light is the default when nothing else applies. */
+:root,
+:root[data-theme="light"] {
+  --color-bg: #FAFAF7;
+  --color-surface: #F1F2EE;
+  --color-border: #E1E3DD;
+  --color-text: #1B1E1C;
+  --color-muted: #596059;
+  --color-accent: #1D7148;
+  --color-on-accent: #FAFAF7;
+  --color-status-wip: #9A5B00;
+}
+
+/* No-JS / no stored choice: follow the OS. Must stay identical to the block below. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #121413;
+    --color-surface: #1A1D1B;
+    --color-border: #2A2E2B;
+    --color-text: #E6E8E4;
+    --color-muted: #9AA29C;
+    --color-accent: #62C18E;
+    --color-on-accent: #121413;
+    --color-status-wip: #E0A548;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-bg: #121413;
+  --color-surface: #1A1D1B;
+  --color-border: #2A2E2B;
+  --color-text: #E6E8E4;
+  --color-muted: #9AA29C;
+  --color-accent: #62C18E;
+  --color-on-accent: #121413;
+  --color-status-wip: #E0A548;
+}
