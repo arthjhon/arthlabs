@@ -186,3 +186,5 @@ button { font: inherit; color: inherit; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; }
 }
+.prose figure { margin-inline: 0; }
+.prose figcaption { font-size: var(--text-sm); color: var(--color-muted); font-style: italic; margin-top: var(--space-2); }

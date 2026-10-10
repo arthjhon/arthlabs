@@ -1,6 +1,6 @@
 ---
 title: "Projeto Sentinela"
-description: "Bóia telemétrica de baixo custo (ESP32-S3, MQTT/TLS) e plataforma aberta para monitorar a qualidade da água no estuário Mundaú-Manguaba. Protótipo validado em bancada; piloto previsto."
+description: "Boia telemétrica de baixo custo (ESP32-S3, MQTT/TLS) e plataforma aberta para monitorar a qualidade da água no estuário Mundaú-Manguaba. Protótipo validado em bancada; piloto previsto."
 tags: [ESP32-S3, MQTT, InfluxDB, Telegraf, Supabase, React, IoT, OTA]
 status: active
 github: "https://github.com/arthjhon/projeto-sentinela"
@@ -13,16 +13,16 @@ featured: true
 
 ## Contexto
 
-O Complexo Estuarino-Lagunar Mundaú-Manguaba (Maceió/AL) sustenta de 1,5 a 3 mil famílias do sururu e teve mortandades recorrentes entre 2022 e 2024. Não existe série contínua e pública dos parâmetros que ajudam a explicar esses eventos: o monitoramento oficial é trimestral/mensal ou semanal e sem oxigênio dissolvido e salinidade.
+O Complexo Estuarino-Lagunar Mundaú-Manguaba (Maceió/AL) sustenta de 1,5 a 3 mil famílias do sururu e teve mortandades recorrentes entre 2022 e 2024. Não existe série contínua e pública dos parâmetros que ajudam a explicar esses eventos: o monitoramento oficial é trimestral ou mensal (Qualiágua), ou semanal porém sem oxigênio dissolvido e salinidade (IMA-AL).
 
-O Sentinela é uma bóia telemétrica de baixo custo (pH, turbidez, temperatura) somada a uma plataforma web aberta, com portal público e painel administrativo. Código sob licença MIT. O escopo é triagem ambiental, não enquadramento legal. Nasceu no Projeto Integrador I de Engenharia da Computação na UMJ, e eu faço a coordenação técnica.
+O Sentinela é uma boia telemétrica de baixo custo (pH, turbidez, temperatura) somada a uma plataforma web aberta, com portal público e painel administrativo. Código sob licença MIT. O escopo é triagem ambiental, não enquadramento legal. Desenvolvido no contexto do Projeto Integrador I (Engenharia da Computação, UMJ), com coordenação técnica minha.
 
 ## Status
 
-Honesto, em 26/09/2026:
+Situação em 26/09/2026:
 
 - **Protótipo validado em bancada** com água real: cerca de 54 mil leituras do primeiro nó, de mai a jul/2026.
-- **Plataforma em produção**, com cadastro dinâmico de bóias.
+- **Plataforma em produção**, com cadastro dinâmico de boias.
 - **Piloto em campo previsto** para a Lagoa Mundaú. Ainda não houve implantação na lagoa.
 - Sensores **ainda sem calibração**: nenhum valor da bancada deve ser lido como resultado.
 
@@ -49,6 +49,7 @@ nó ESP32-S3
 - **SPA React** com portal público (índice de qualidade, semáforo por faixas, mapa) e painel admin (histórico, CSV, manutenção, calibração, OTA).
 - Não há backend próprio no caminho do dado.
 
+<figure>
 <img
   src="/images/projects/sentinela/mapa.png"
   alt="Mapa do portal do Sentinela com um ponto ativo e dois pontos de expansão planejados na região da Lagoa Mundaú"
@@ -57,8 +58,8 @@ nó ESP32-S3
   loading="lazy"
   decoding="async"
 />
-
-*Mapa do portal: 1 protótipo ativo e 2 pontos de expansão planejados.*
+<figcaption>Mapa do portal: 1 protótipo ativo e 2 pontos de expansão planejados.</figcaption>
+</figure>
 
 ## OTA
 
