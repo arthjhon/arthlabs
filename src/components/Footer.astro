@@ -3,7 +3,8 @@ import { links, icons } from '../data/links';
 import { t } from '../i18n/pt';
 
 const year = new Date().getFullYear();
-const shown = links.filter((l) => ['Email', 'GitHub', 'LinkedIn'].includes(l.label));
+const order = ['mail', 'github', 'linkedin'];
+const shown = order.flatMap((icon) => links.filter((l) => l.icon === icon));
 ---
 
 <footer class="site-footer">
