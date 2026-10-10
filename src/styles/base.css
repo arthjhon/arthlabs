@@ -92,6 +92,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   margin-bottom: var(--space-6);
   border-bottom: 1px solid var(--color-border);
 }
+.section-head:has(+ .project-list, + .post-list) { border-bottom: 0; padding-bottom: 0; margin-bottom: var(--space-3); }
 .section-title { font-size: var(--text-lg); }
 .section-link { font-size: var(--text-sm); color: var(--color-muted); white-space: nowrap; }
 
