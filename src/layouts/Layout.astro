@@ -82,6 +82,8 @@ const ogImage = new URL(image, Astro.site).toString();
             theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
           }
           document.documentElement.dataset.theme = theme;
+          var bg = theme === 'dark' ? '#121413' : '#FAFAF7';
+          document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute('content', bg); });
           document.documentElement.classList.add('js');
         }
         apply();
