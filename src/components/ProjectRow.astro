@@ -1,0 +1,84 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import StatusBadge from './StatusBadge.astro';
+import { projectLinks, yearOf } from '../lib/content';
+import { t } from '../i18n/pt';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, description, tags, status, date } = project.data;
+const links = projectLinks(project);
+---
+
+<li class="project-row">
+  <div class="main">
+    <h3 class="title"><a href={`/projects/${project.id}`}>{title}</a></h3>
+    <p class="desc">{description}</p>
+    {tags.length > 0 && (
+      <ul class="stack" aria-label={t.meta.stack}>
+        {tags.map((tag) => <li>{tag}</li>)}
+      </ul>
+    )}
+  </div>
+  <div class="aside">
+    <StatusBadge status={status} />
+    <span class="year">{yearOf(date)}</span>
+    {links.map((l) => (
+      <a class="ext" href={l.href} target="_blank" rel="noopener">
+        {t.meta[l.kind]}<span aria-hidden="true"> ↗</span>
+      </a>
+    ))}
+  </div>
+</li>
+
+<style>
+  .project-row {
+    display: grid;
+    gap: var(--space-3);
+    padding-block: var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+  @media (min-width: 960px) {
+    .project-row { grid-template-columns: minmax(0, 1fr) 220px; gap: var(--space-8); }
+  }
+  .title { font-size: var(--text-lg); }
+  .title a { text-decoration: none; }
+  .title a:hover { color: var(--color-accent); }
+  .desc { margin-top: var(--space-2); color: var(--color-muted); max-width: var(--measure); }
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-3);
+    margin-top: var(--space-3);
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+  }
+  .aside {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+  }
+  @media (min-width: 960px) {
+    .aside { flex-direction: column; align-items: flex-end; text-align: right; }
+  }
+  .year { font-variant-numeric: tabular-nums; }
+  .ext {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  .ext:hover { color: var(--color-accent); }
+  @media (min-width: 960px) { .ext { min-height: 24px; } }
+</style>

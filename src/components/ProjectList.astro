@@ -1,0 +1,18 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProjectRow from './ProjectRow.astro';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+}
+
+const { projects } = Astro.props;
+---
+
+<ul class="project-list" role="list">
+  {projects.map((p) => <ProjectRow project={p} />)}
+</ul>
+
+<style>
+  .project-list { list-style: none; padding: 0; border-top: 1px solid var(--color-border); }
+</style>
