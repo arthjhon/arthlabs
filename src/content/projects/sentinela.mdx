@@ -37,8 +37,10 @@ Honesto, em 26/09/2026:
 ## Pipeline
 
 ```text
-nó ESP32-S3 → MQTT/TLS → broker gerenciado ─┬→ Telegraf → InfluxDB 2.7   (histórico)
-                                            └→ navegador via WebSocket   (tempo real)
+nó ESP32-S3
+  → MQTT/TLS → broker gerenciado
+      ├→ Telegraf → InfluxDB 2.7 (histórico)
+      └→ WebSocket → navegador (tempo real)
 ```
 
 - Dois caminhos independentes: o tempo real no navegador não depende do servidor, e o histórico é ingerido de forma declarativa pelo Telegraf.
