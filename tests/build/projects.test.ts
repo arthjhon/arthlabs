@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { loadPage } from './helpers';
+
+const projectCount = readdirSync(join(process.cwd(), 'src/content/projects')).filter(
+  (f) => f.endsWith('.mdx') && !f.startsWith('_'),
+).length;
 
 describe('/projects', () => {
   const doc = loadPage('/projects');
@@ -11,7 +17,7 @@ describe('/projects', () => {
 
   it('renders every project as a row linking to its page', () => {
     const rows = doc.querySelectorAll('li.project-row');
-    expect(rows.length).toBe(4);
+    expect(rows.length).toBe(projectCount);
     for (const row of rows) {
       expect(row.querySelector('h3 a')!.getAttribute('href')).toMatch(/^\/projects\/[\w-]+$/);
     }
@@ -33,4 +39,17 @@ describe('/projects', () => {
   it('has no client filter script left', () => {
     expect(doc.querySelector('[data-filter-bar]')).toBeNull();
   });
+});
+
+describe('project pages sanitization', () => {
+  for (const slug of ['fecapees-cs2', 'sentinela']) {
+    // Scan the article only: footer SVG path data can look like dotted quads.
+    const html = loadPage(`/projects/${slug}`).querySelector('article')!.outerHTML;
+    it(`/projects/${slug} leaks no network identifiers or banned terms`, () => {
+      expect(html).not.toMatch(/\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b/);
+      expect(html).not.toContain('.ts.net');
+      expect(html).not.toContain('SIM7000G');
+      expect(html).not.toMatch(/\bRICA\b/);
+    });
+  }
 });

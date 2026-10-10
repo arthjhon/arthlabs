@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { loadPage } from './helpers';
+import { links } from '../../src/data/links';
 
 describe('/contact', () => {
   const doc = loadPage('/contact');
@@ -28,7 +29,7 @@ describe('/contact', () => {
 describe('/links', () => {
   const doc = loadPage('/links');
   it('lists every link without gradient frame or prompt', () => {
-    expect(doc.querySelectorAll('a.link-item').length).toBe(7);
+    expect(doc.querySelectorAll('a.link-item').length).toBe(links.length);
     expect(doc.text).not.toContain('$ whoami');
   });
 });
