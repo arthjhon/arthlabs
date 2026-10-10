@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { loadPage } from './helpers';
+import { stack } from '../../src/data/experience';
 
 describe('/about', () => {
   const doc = loadPage('/about');
@@ -11,8 +12,8 @@ describe('/about', () => {
   });
 
   it('renders the stack as a table with headers', () => {
-    expect(doc.querySelectorAll('table.stack-table th[scope="col"]').length).toBe(3);
-    expect(doc.querySelectorAll('table.stack-table tbody tr').length).toBe(9);
+    expect(doc.querySelectorAll('table.stack-table th[scope="col"]').length).toBe(stack.some((r) => r.context.length > 0) ? 3 : 2);
+    expect(doc.querySelectorAll('table.stack-table tbody tr').length).toBe(stack.length);
   });
 
   it('renders the timeline as an ordered list', () => {

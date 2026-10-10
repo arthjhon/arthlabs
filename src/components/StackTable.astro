@@ -1,6 +1,8 @@
 ---
 import { stack } from '../data/experience';
 import { t } from '../i18n/pt';
+
+const hasContext = stack.some((row) => row.context.length > 0);
 ---
 
 <div class="wrap">
@@ -9,7 +11,7 @@ import { t } from '../i18n/pt';
       <tr>
         <th scope="col">{t.about.stackCols.area}</th>
         <th scope="col">{t.about.stackCols.tools}</th>
-        <th scope="col">{t.about.stackCols.context}</th>
+        {hasContext && <th scope="col">{t.about.stackCols.context}</th>}
       </tr>
     </thead>
     <tbody>
@@ -17,7 +19,7 @@ import { t } from '../i18n/pt';
         <tr>
           <th scope="row">{row.area}</th>
           <td class="tools">{row.tools.join(' · ')}</td>
-          <td class="ctx">{row.context.map((c) => t.about.context[c]).join(', ')}</td>
+          {hasContext && <td class="ctx">{row.context.map((c) => t.about.context[c]).join(', ')}</td>}
         </tr>
       ))}
     </tbody>
