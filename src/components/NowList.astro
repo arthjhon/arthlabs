@@ -1,0 +1,26 @@
+---
+import { now, nowUpdated } from '../data/now';
+import { t } from '../i18n/pt';
+---
+
+<div class="now">
+  <ul role="list">
+    {now.map((item) => (
+      <li>
+        <span class="kind">{t.now.kind[item.kind]}</span>
+        <span>{item.text}</span>
+      </li>
+    ))}
+  </ul>
+  <p class="eyebrow updated">{t.now.updated} {nowUpdated}</p>
+</div>
+
+<style>
+  ul { list-style: none; padding: 0; display: grid; gap: var(--space-3); }
+  li { display: grid; gap: var(--space-1); }
+  @media (min-width: 640px) {
+    li { grid-template-columns: 120px minmax(0, 1fr); gap: var(--space-6); align-items: baseline; }
+  }
+  .kind { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-accent); }
+  .updated { margin-top: var(--space-4); }
+</style>
