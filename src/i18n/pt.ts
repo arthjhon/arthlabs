@@ -83,6 +83,14 @@ export const t = {
     socials: 'Redes',
   },
   footer: { built: 'Feito com Astro · servido pela Cloudflare' },
+  links: {
+    tiles: 'Redes e contato',
+    carousel: 'Destaques',
+    goTo: 'Ir para o destaque',
+    project: 'Ver projeto',
+    affiliate:
+      'Alguns destaques são links de indicação: posso receber comissão, sem custo extra para você.',
+  },
   diagram: {
     title: 'Diagrama do homelab',
     desc: 'Fluxo simplificado: internet, firewall, segmentos de gerência, servidores e IoT; servidores rodam um hypervisor com serviços; sensores IoT publicam via MQTT para a observabilidade.',

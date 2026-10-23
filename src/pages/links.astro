@@ -1,10 +1,17 @@
 ---
 // Served at https://links.arthlabs.dev (the worker rewrites "/" on that host
 // to this page and 301s arthlabs.dev/links there).
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import LinksCarousel from '../components/LinksCarousel.astro';
 import { links, icons } from '../data/links';
+import { highlights } from '../data/highlights';
+import { pickFeatured } from '../lib/content';
 import { t } from '../i18n/pt';
+
+const featured = pickFeatured(await getCollection('projects'));
+const hasAffiliate = highlights.some((h) => h.affiliate);
 ---
 
 <Layout
@@ -21,22 +28,26 @@ import { t } from '../i18n/pt';
       <p class="role">{t.home.role}</p>
     </header>
 
-    <ul class="list" role="list">
+    <ul class="tiles" role="list" aria-label={t.links.tiles}>
       {links.map((l) => {
         const external = !l.href.startsWith('mailto:');
         return (
           <li>
-            <a class="link-item" href={l.href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
+            <a class="link-tile" href={l.href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
               <span class="icon" set:html={icons[l.icon]} />
               <span class="name">{l.label}</span>
-              <span class="handle">{l.handle}</span>
             </a>
           </li>
         );
       })}
     </ul>
 
-    <footer class="foot"><a href="https://arthlabs.dev">arthlabs.dev</a></footer>
+    <LinksCarousel highlights={highlights} projects={featured} />
+
+    <footer class="foot">
+      {hasAffiliate && <p class="affiliate-note">{t.links.affiliate}</p>}
+      <a href="https://arthlabs.dev">arthlabs.dev</a>
+    </footer>
   </div>
 </Layout>
 
@@ -49,29 +60,50 @@ import { t } from '../i18n/pt';
     display: flex;
     flex-direction: column;
     gap: var(--space-8);
+    overflow-x: clip;
   }
   .top { display: flex; justify-content: flex-end; }
   .head { display: grid; justify-items: center; text-align: center; gap: var(--space-2); }
   .photo { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 1px solid var(--color-border); }
   h1 { font-size: var(--text-xl); margin-top: var(--space-2); }
   .role { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-accent); }
-  .list { list-style: none; padding: 0; display: grid; gap: var(--space-2); }
-  .link-item {
+
+  .tiles {
+    list-style: none;
+    padding: 0;
     display: grid;
-    grid-template-columns: 20px 90px minmax(0, 1fr);
-    align-items: center;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-3);
-    min-height: 52px;
-    padding: 0 var(--space-4);
+  }
+  .link-tile {
+    aspect-ratio: 1;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: var(--space-2);
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius);
+    color: var(--color-text);
     text-decoration: none;
-    transition: border-color var(--dur) var(--ease);
+    transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
   }
-  .link-item:hover { border-color: var(--color-accent); color: var(--color-text); }
-  .icon :global(svg) { width: 18px; height: 18px; }
-  .name { font-weight: 500; }
-  .handle { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-muted); text-align: right; overflow-wrap: anywhere; }
-  .foot { margin-top: auto; text-align: center; font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-muted); }
+  .icon { display: inline-flex; color: var(--color-muted); transition: color var(--dur) var(--ease); }
+  .icon :global(svg) { width: 28px; height: 28px; }
+  .name { font-size: var(--text-sm); font-weight: 500; }
+  .link-tile:hover,
+  .link-tile:focus-visible { border-color: var(--color-accent); color: var(--color-text); }
+  .link-tile:hover .icon,
+  .link-tile:focus-visible .icon { color: var(--color-accent); }
+
+  .foot {
+    margin-top: auto;
+    display: grid;
+    gap: var(--space-3);
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+  }
+  .affiliate-note { font-family: var(--font-sans); }
 </style>

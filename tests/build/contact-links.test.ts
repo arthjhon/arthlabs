@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { loadPage } from './helpers';
+import { readdirSync, readFileSync } from 'node:fs';
 import { links } from '../../src/data/links';
+import { highlights } from '../../src/data/highlights';
 
 describe('/contact', () => {
   const doc = loadPage('/contact');
@@ -28,8 +30,48 @@ describe('/contact', () => {
 
 describe('/links', () => {
   const doc = loadPage('/links');
-  it('lists every link without gradient frame or prompt', () => {
-    expect(doc.querySelectorAll('a.link-item').length).toBe(links.length);
+  const featuredSlugs = readdirSync('src/content/projects')
+    .filter((f) => f.endsWith('.mdx') && /^featured:\s*true\s*$/m.test(readFileSync(`src/content/projects/${f}`, 'utf8')))
+    .map((f) => f.replace(/\.mdx$/, ''));
+  const expectedCards = highlights.length + Math.min(featuredSlugs.length, 4);
+
+  it('renders every link as a tile, without gradient frame or prompt', () => {
+    expect(doc.querySelectorAll('a.link-tile').length).toBe(links.length);
     expect(doc.text).not.toContain('$ whoami');
+  });
+
+  it('tiles are named by their label', () => {
+    for (const l of links) {
+      expect(doc.querySelector(`a.link-tile[href="${l.href}"]`)!.text).toContain(l.label);
+    }
+  });
+
+  it('carousel holds manual highlights first, then featured projects', () => {
+    const cards = doc.querySelectorAll('.carousel .card');
+    expect(cards.length).toBe(expectedCards);
+    const projectHrefs = cards
+      .slice(highlights.length)
+      .map((c) => c.querySelector('a.button')!.getAttribute('href'));
+    for (const href of projectHrefs) {
+      expect(href).toMatch(/^https:\/\/arthlabs\.dev\/projects\/[a-z0-9-]+$/);
+      expect(featuredSlugs).toContain(href!.split('/').pop());
+    }
+  });
+
+  it('carousel is a keyboard-reachable labelled region', () => {
+    const track = doc.querySelector('.carousel-track')!;
+    expect(track.getAttribute('tabindex')).toBe('0');
+    expect(track.getAttribute('role')).toBe('region');
+    const labelledBy = track.getAttribute('aria-labelledby');
+    const name = track.getAttribute('aria-label') ?? (labelledBy && doc.querySelector(`#${labelledBy}`)?.text);
+    expect(name).toBeTruthy();
+  });
+
+  it('shows the referral notice only when a highlight is an affiliate link', () => {
+    const hasAffiliate = highlights.some((h) => h.affiliate);
+    expect(doc.querySelector('.affiliate-note') !== null).toBe(hasAffiliate);
+    for (const a of doc.querySelectorAll('.carousel a[rel~="sponsored"]')) {
+      expect(a.getAttribute('rel')).toContain('noopener');
+    }
   });
 });
