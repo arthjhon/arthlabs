@@ -23,7 +23,10 @@ body {
 
 /* ---- Atmosphere: fixed diffuse glow + amber cursor light (no grid, no blur) ---- */
 
-html { --mx: 70vw; --my: 30vh; }
+/* Registered with inherits:false so a pointer move restyles body (and its ::after) only,
+   not the whole tree. initial-value is the no-JS default light position. */
+@property --mx { syntax: '<length>'; inherits: false; initial-value: 70vw; }
+@property --my { syntax: '<length>'; inherits: false; initial-value: 30vh; }
 
 body::before,
 body::after {
