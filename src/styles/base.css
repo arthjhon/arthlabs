@@ -17,7 +17,33 @@ body {
   min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  position: relative;
+  isolation: isolate;
 }
+
+/* ---- Atmosphere: fixed diffuse glow + amber cursor light (no grid, no blur) ---- */
+
+html { --mx: 70vw; --my: 30vh; }
+
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+body::before {
+  background:
+    radial-gradient(60vw 50vh at 0% 0%, color-mix(in oklab, var(--color-glow) 22%, transparent), transparent 70%),
+    radial-gradient(50vw 45vh at 100% 100%, color-mix(in oklab, var(--color-accent) 12%, transparent), transparent 70%),
+    radial-gradient(40vw 40vh at 100% 0%, color-mix(in oklab, var(--color-glow) 10%, transparent), transparent 70%);
+}
+body::after {
+  background: radial-gradient(520px circle at var(--mx, 70vw) var(--my, 30vh), color-mix(in oklab, var(--color-accent) 9%, transparent), transparent 60%);
+}
+@media (pointer: coarse) { body::after { display: none; } }
+@media (prefers-reduced-motion: reduce) { body::after { display: none; } }
 
 img, svg { display: block; max-width: 100%; }
 

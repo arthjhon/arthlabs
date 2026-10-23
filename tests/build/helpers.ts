@@ -1,4 +1,4 @@
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { parse, type HTMLElement } from 'node-html-parser';
 
@@ -17,4 +17,25 @@ export function readDist(route: string): string {
 
 export function loadPage(route: string): HTMLElement {
   return parse(readDist(route));
+}
+
+function walk(dir: string): string[] {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory() ? walk(join(dir, e.name)) : [join(dir, e.name)],
+  );
+}
+
+/**
+ * Astro inlines small stylesheets into each page's <style>, so scan both
+ * dist/_astro/*.css and inline <style> blocks (of one route, or of every page).
+ */
+export function readAllCss(route?: string): string {
+  const files = walk(DIST);
+  const htmls = route === undefined ? files.filter((f) => f.endsWith('.html')) : [fileFor(route)];
+  return [
+    ...files.filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')),
+    ...htmls.flatMap((f) =>
+      [...readFileSync(f, 'utf8').matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]),
+    ),
+  ].join('\n');
 }

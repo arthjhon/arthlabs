@@ -36,11 +36,25 @@ const links = projectLinks(project);
 
 <style>
   .project-row {
+    position: relative;
+    isolation: isolate;
     display: grid;
     gap: var(--space-3);
     padding-block: var(--space-6);
     border-bottom: 1px solid var(--color-border);
   }
+  .project-row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(260px circle at var(--rx, 50%) var(--ry, 50%), color-mix(in oklab, var(--color-accent) 7%, transparent), transparent 70%);
+    transition: opacity var(--dur) var(--ease);
+  }
+  .project-row:hover::before { opacity: 1; }
+  @media (pointer: coarse) { .project-row::before { display: none; } }
   @media (min-width: 960px) {
     .project-row { grid-template-columns: minmax(0, 1fr) 220px; gap: var(--space-8); }
   }

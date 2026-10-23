@@ -1,24 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { readAllCss } from './helpers';
 
-const dist = join(process.cwd(), 'dist');
-
-function walk(dir: string): string[] {
-  return readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
-    e.isDirectory() ? walk(join(dir, e.name)) : [join(dir, e.name)],
-  );
-}
-
-// Astro inlines small stylesheets into each page's <style>, so scan both
-// dist/_astro/*.css and the inline <style> blocks of every built page.
-const files = walk(dist);
-const css = [
-  ...files.filter((f) => f.endsWith('.css')).map((f) => readFileSync(f, 'utf8')),
-  ...files
-    .filter((f) => f.endsWith('.html'))
-    .flatMap((f) => [...readFileSync(f, 'utf8').matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1])),
-].join('\n');
+const css = readAllCss();
 
 // Scoped selectors carry [data-astro-cid-*] attributes, so match by pattern.
 function bodies(selector: RegExp): string[] {
