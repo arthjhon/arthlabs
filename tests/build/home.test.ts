@@ -21,6 +21,12 @@ describe('home', () => {
     expect(rows.length).toBeLessThanOrEqual(4);
   });
 
+  it('shows the proof strip with 4 items', () => {
+    const items = doc.querySelectorAll('ul.proof li');
+    expect(items.length).toBe(4);
+    expect(items[0].text).toContain('3+ anos');
+  });
+
   it('shows the Now list', () => {
     expect(doc.querySelectorAll('.now li').length).toBeGreaterThan(0);
   });

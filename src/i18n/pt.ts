@@ -34,6 +34,7 @@ export const t = {
     allProjects: 'Todos os projetos →',
     writing: 'Escritos recentes',
     allPosts: 'Todos os posts →',
+    proofLabel: 'Em números',
   },
   projects: {
     title: 'Projetos',

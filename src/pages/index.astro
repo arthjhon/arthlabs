@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
+import ProofStrip from '../components/ProofStrip.astro';
 import NowList from '../components/NowList.astro';
 import ProjectList from '../components/ProjectList.astro';
 import PostList from '../components/PostList.astro';
@@ -14,6 +15,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(byDa
 
 <Layout>
   <Hero />
+  <ProofStrip />
 
   <div class="container home">
     <section class="section" aria-labelledby="now-title">
