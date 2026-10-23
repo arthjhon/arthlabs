@@ -5,8 +5,15 @@ import { spawn, execFileSync } from 'node:child_process';
 
 const PORT = 4399;
 const ROUTES = ['/', '/projects', '/about'];
-const server = spawn('npx', ['astro', 'preview', '--port', String(PORT)], { stdio: 'ignore' });
-const stop = () => server.kill();
+// Spawn the binary directly and detached so the whole process group can be killed
+// (going through npx leaves the astro preview child alive after server.kill()).
+const server = spawn('node_modules/.bin/astro', ['preview', '--port', String(PORT)], {
+  stdio: 'ignore',
+  detached: true,
+});
+const stop = () => {
+  try { process.kill(-server.pid); } catch {}
+};
 process.on('exit', stop);
 
 async function ready() {
