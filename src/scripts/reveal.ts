@@ -25,7 +25,8 @@ function init(): void {
     (entries) => {
       delivered = true;
       for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
+        // Elements already scrolled past (anchor jump) must not stay hidden above the viewport.
+        if (!entry.isIntersecting && entry.boundingClientRect.bottom > 0) continue;
         reveal(entry.target);
         io.unobserve(entry.target);
       }
