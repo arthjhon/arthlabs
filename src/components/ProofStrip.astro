@@ -8,7 +8,7 @@ import { t } from '../i18n/pt';
     {proof.map((p, i) => (
       <li>
         {i > 0 && <span class="sep" aria-hidden="true">·</span>}
-        <span class="value">{p.value}</span> <span class="label">{p.label}</span>
+        <span><span class="value">{p.value}</span> <span class="label">{p.label}</span></span>
       </li>
     ))}
   </ul>
@@ -26,7 +26,8 @@ import { t } from '../i18n/pt';
     font-family: var(--font-mono);
     font-size: var(--text-sm);
   }
-  .sep { margin-right: var(--space-4); color: var(--color-muted); }
+  .proof li { display: flex; gap: var(--space-4); }
+  .sep { color: var(--color-muted); }
   .value { color: var(--color-text); }
   .label { color: var(--color-muted); }
   @media (max-width: 599px) {
