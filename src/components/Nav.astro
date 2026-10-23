@@ -1,5 +1,4 @@
 ---
-import ThemeToggle from './ThemeToggle.astro';
 import { t } from '../i18n/pt';
 
 const { pathname } = Astro.url;
@@ -26,7 +25,6 @@ const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${
     </nav>
     <div class="tools">
       {/* i18n sub-project: language switcher goes here */}
-      <ThemeToggle />
     </div>
   </div>
 </header>

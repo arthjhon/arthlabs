@@ -10,7 +10,6 @@ export const t = {
     about: 'Sobre',
     contact: 'Contato',
   },
-  theme: { toggle: 'Tema escuro' },
   status: { active: 'ativo', wip: 'em andamento', archived: 'arquivado' },
   statusGroup: { active: 'Ativos', wip: 'Em andamento', archived: 'Arquivados' },
   category: {

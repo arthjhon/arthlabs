@@ -1,7 +1,19 @@
 /* Design tokens. Components consume only these variables — never raw hex. */
 
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
+
+  --color-bg: #070B14;
+  --color-surface: #0C1322;
+  --color-border: #1B2740;
+  --color-text: #E6ECF5;
+  --color-muted: #8C9AB3;
+  --color-accent: #F5A524;
+  --color-on-accent: #1A1206;
+  --color-accent-2: #7CC4FF;
+  --color-status-wip: #7CC4FF;
+  --color-danger: #FF7A59;
+  --color-glow: #1D4ED8;
 
   --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
@@ -36,42 +48,4 @@
 
 @media (max-width: 639px) {
   :root { --header-h: 112px; }
-}
-
-/* Light is the default when nothing else applies. */
-:root,
-:root[data-theme="light"] {
-  --color-bg: #FAFAF7;
-  --color-surface: #F1F2EE;
-  --color-border: #E1E3DD;
-  --color-text: #1B1E1C;
-  --color-muted: #596059;
-  --color-accent: #1D7148;
-  --color-on-accent: #FAFAF7;
-  --color-status-wip: #9A5B00;
-}
-
-/* No-JS / no stored choice: follow the OS. Must stay identical to the block below. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --color-bg: #121413;
-    --color-surface: #1A1D1B;
-    --color-border: #2A2E2B;
-    --color-text: #E6E8E4;
-    --color-muted: #9AA29C;
-    --color-accent: #62C18E;
-    --color-on-accent: #121413;
-    --color-status-wip: #E0A548;
-  }
-}
-
-:root[data-theme="dark"] {
-  --color-bg: #121413;
-  --color-surface: #1A1D1B;
-  --color-border: #2A2E2B;
-  --color-text: #E6E8E4;
-  --color-muted: #9AA29C;
-  --color-accent: #62C18E;
-  --color-on-accent: #121413;
-  --color-status-wip: #E0A548;
 }

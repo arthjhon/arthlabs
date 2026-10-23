@@ -62,8 +62,7 @@ const ogImage = new URL(image, Astro.site).toString();
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FAFAF7" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#121413" />
+    <meta name="theme-color" content="#070B14" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title="arThLabs blog" href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -75,20 +74,10 @@ const ogImage = new URL(image, Astro.site).toString();
 
     <script is:inline>
       (function () {
-        function apply() {
-          var theme = null;
-          try { theme = localStorage.getItem('theme'); } catch (e) {}
-          if (theme !== 'light' && theme !== 'dark') {
-            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-          }
-          document.documentElement.dataset.theme = theme;
-          var bg = theme === 'dark' ? '#121413' : '#FAFAF7';
-          document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) { m.setAttribute('content', bg); });
-          document.documentElement.classList.add('js');
-        }
+        function apply() { document.documentElement.classList.add('js'); }
         apply();
-        if (!window.__themeBound) {
-          window.__themeBound = true;
+        if (!window.__jsClassBound) {
+          window.__jsClassBound = true;
           document.addEventListener('astro:after-swap', apply);
         }
       })();
