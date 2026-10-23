@@ -25,6 +25,10 @@ describe('404 page', () => {
     expect(page().querySelector('svg.rack-mark[data-state="down"]')).not.toBeNull();
   });
 
+  it('is noindex', () => {
+    expect(page().querySelector('meta[name="robots"]')?.getAttribute('content')).toBe('noindex');
+  });
+
   it('labels the nav "Ir para"', () => {
     expect(page().querySelector('nav.not-found-links')?.getAttribute('aria-label')).toBe('Ir para');
   });

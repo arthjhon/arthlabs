@@ -22,6 +22,8 @@ interface Props {
   canonical?: string;
   /** Standalone page: no nav, no footer (e.g. links.arthlabs.dev). */
   bare?: boolean;
+  /** Emit <meta name="robots" content="noindex"> (e.g. the 404 page). */
+  noindex?: boolean;
 }
 
 const {
@@ -29,6 +31,7 @@ const {
   description = 'Projetos e notas técnicas de Arthur Jhonathas: infraestrutura, redes, monitoramento, IoT e automação.',
   image = '/og-default.png',
   bare = false,
+  noindex = false,
 } = Astro.props;
 
 const canonical =
@@ -44,6 +47,7 @@ const ogImage = new URL(image, Astro.site).toString();
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
 
     <meta property="og:site_name" content="arThLabs" />

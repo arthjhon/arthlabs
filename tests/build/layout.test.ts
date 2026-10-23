@@ -13,6 +13,10 @@ describe('layout shell', () => {
     expect(head).not.toContain("localStorage.getItem('theme')");
   });
 
+  it('does not emit a robots meta on indexable pages', () => {
+    expect(doc.querySelector('meta[name="robots"]')).toBeNull();
+  });
+
   it('marks the current nav item with aria-current', () => {
     const about = loadPage('/about');
     const current = about.querySelectorAll('nav a[aria-current="page"]');
