@@ -14,7 +14,7 @@ const homelabEntries: MetaEntry[] = homelab.map((h) => ({ key: h.label, value: h
     <header class="intro">
       <img class="photo" src="/images/arthur.webp" width="640" height="640" alt="" />
       <div>
-        <h1>Arthur Jhonathas</h1>
+        <h1 class="display">Arthur Jhonathas</h1>
         <p class="role">{t.home.role}</p>
       </div>
     </header>
@@ -56,7 +56,7 @@ const homelabEntries: MetaEntry[] = homelab.map((h) => ({ key: h.label, value: h
 <style>
   .intro { display: flex; align-items: center; gap: var(--space-6); }
   .photo { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 1px solid var(--color-border); }
-  h1 { font-size: var(--text-2xl); letter-spacing: -0.01em; }
+  h1 { font-size: var(--text-2xl); }
   .role { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-accent); margin-top: var(--space-1); }
   .bio { margin-top: var(--space-8); }
 </style>

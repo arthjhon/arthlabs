@@ -23,7 +23,7 @@ const hasAffiliate = highlights.some((h) => h.affiliate);
   <div class="links-page">
     <header class="head">
       <img class="photo" src="/images/arthur.webp" width="640" height="640" alt="" />
-      <h1>Arthur Jhonathas</h1>
+      <h1 class="display">Arthur Jhonathas</h1>
       <p class="role">{t.home.role}</p>
     </header>
 
@@ -63,7 +63,7 @@ const hasAffiliate = highlights.some((h) => h.affiliate);
   }
   .head { display: grid; justify-items: center; text-align: center; gap: var(--space-2); }
   .photo { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 1px solid var(--color-border); }
-  h1 { font-size: var(--text-xl); margin-top: var(--space-2); }
+  h1 { font-size: var(--text-2xl); margin-top: var(--space-2); }
   .role { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-accent); }
 
   .tiles {

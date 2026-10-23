@@ -40,6 +40,15 @@ describe('/links', () => {
     expect(doc.text).not.toContain('$ whoami');
   });
 
+  it('has no theme toggle and carries the rack mark', () => {
+    expect(doc.querySelector('button[data-theme-toggle]')).toBeNull();
+    expect(doc.querySelector('svg.rack-mark')).not.toBeNull();
+  });
+
+  it('name uses the display style', () => {
+    expect(doc.querySelector('h1')!.classList.contains('display')).toBe(true);
+  });
+
   it('tiles are named by their label', () => {
     for (const l of links) {
       expect(doc.querySelector(`a.link-tile[href="${l.href}"]`)!.text).toContain(l.label);

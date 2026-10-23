@@ -27,7 +27,7 @@ interface Props {
 const {
   title = 'arThLabs — Arthur Jhonathas, infra & SysAdmin',
   description = 'Projetos e notas técnicas de Arthur Jhonathas: infraestrutura, redes, monitoramento, IoT e automação.',
-  image = '/og-default.svg',
+  image = '/og-default.png',
   bare = false,
 } = Astro.props;
 
@@ -52,6 +52,8 @@ const ogImage = new URL(image, Astro.site).toString();
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="pt_BR" />
 
     <meta name="twitter:card" content="summary_large_image" />
