@@ -227,6 +227,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .js .hero .pitch { animation: hero-in 360ms var(--ease) 160ms both; }
 .js .hero .actions { animation: hero-in 360ms var(--ease) 240ms both; }
 
+@media print {
+  [data-reveal], .js [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-reveal], .js [data-reveal] { opacity: 1; transform: none; transition: none; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; }

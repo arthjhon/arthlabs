@@ -1,7 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { loadPage, readAllCss } from './helpers';
+import { loadPage, readAllCss, readDist } from './helpers';
 
 function rules(css: string): { selector: string; body: string }[] {
   // Flatten nested @media blocks well enough for simple assertions.
@@ -30,15 +28,14 @@ describe('motion', () => {
     expect(block).toMatch(/data-reveal[^{]*\{[^}]*transform:none/);
   });
 
-  it('ships the reveal script (page-load + IntersectionObserver)', () => {
-    const dir = join(process.cwd(), 'dist', '_astro');
-    const ok = readdirSync(dir)
-      .filter((f) => f.endsWith('.js'))
-      .some((f) => {
-        const s = readFileSync(join(dir, f), 'utf8');
-        return s.includes('IntersectionObserver') && s.includes('astro:page-load');
-      });
-    expect(ok).toBe(true);
+  it('inlines the reveal module in the page', () => {
+    const html = readDist('/');
+    expect(html).toContain('is-revealed');
+    expect(html).toContain('[data-reveal]:not(.is-revealed)');
+  });
+
+  it('keeps reveal visible when printing', () => {
+    expect(css.replace(/\s+/g, '')).toMatch(/@mediaprint\{[^@]*data-reveal[^}]*opacity:1/);
   });
 
   it('marks home content for reveal with stagger index', () => {
