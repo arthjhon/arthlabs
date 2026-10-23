@@ -11,8 +11,11 @@ const server = spawn('node_modules/.bin/astro', ['preview', '--port', String(POR
   stdio: 'ignore',
   detached: true,
 });
+// Astro 7 hands the preview off to a background daemon in its own session, which a
+// group kill cannot reach, so also ask astro to stop it (idempotent, safe to repeat).
 const stop = () => {
   try { process.kill(-server.pid); } catch {}
+  try { execFileSync('node_modules/.bin/astro', ['preview', 'stop'], { stdio: 'ignore' }); } catch {}
 };
 process.on('exit', stop);
 
