@@ -103,6 +103,9 @@ const ogImage = new URL(image, Astro.site).toString();
       })();
     </script>
     <ClientRouter />
+    <script>
+      import '../scripts/reveal.ts';
+    </script>
   </head>
   <body>
     <a href="#main" class="skip-link">{t.skip}</a>

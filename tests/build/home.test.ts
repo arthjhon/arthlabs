@@ -35,7 +35,6 @@ describe('home', () => {
     expect(html).not.toContain('data-cycle');
     expect(html).not.toContain('hero-glow');
     expect(html).not.toContain('grid-bg');
-    expect(html).not.toContain('data-reveal');
     expect(html).not.toMatch(/text-shadow|box-shadow:\s*0 0 \d+px/);
   });
 });

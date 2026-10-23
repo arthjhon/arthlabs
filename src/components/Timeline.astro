@@ -2,9 +2,9 @@
 import { timeline } from '../data/experience';
 ---
 
-<ol class="timeline" role="list">
-  {timeline.map((e) => (
-    <li>
+<ol class="timeline" role="list" data-reveal-stagger>
+  {timeline.map((e, i) => (
+    <li data-reveal style={`--i:${i}`}>
       <span class="period">{e.period}</span>
       <div>
         <p class="role"><strong>{e.role}</strong> · {e.org}</p>

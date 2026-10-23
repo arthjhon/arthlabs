@@ -9,8 +9,8 @@ interface Props {
 const { projects } = Astro.props;
 ---
 
-<ul class="project-list" role="list">
-  {projects.map((p) => <ProjectRow project={p} />)}
+<ul class="project-list" role="list" data-reveal-stagger>
+  {projects.map((p, i) => <ProjectRow project={p} index={i} />)}
 </ul>
 
 <style>

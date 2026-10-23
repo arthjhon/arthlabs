@@ -6,14 +6,15 @@ import { t } from '../i18n/pt';
 
 interface Props {
   project: CollectionEntry<'projects'>;
+  index?: number;
 }
 
-const { project } = Astro.props;
+const { project, index = 0 } = Astro.props;
 const { title, description, tags, status, date } = project.data;
 const links = projectLinks(project);
 ---
 
-<li class="project-row">
+<li class="project-row" data-reveal style={`--i:${index}`}>
   <div class="main">
     <h3 class="title"><a href={`/projects/${project.id}`}>{title}</a></h3>
     <p class="desc">{description}</p>

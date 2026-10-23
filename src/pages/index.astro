@@ -17,7 +17,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(byDa
 
   <div class="container home">
     <section class="section" aria-labelledby="now-title">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <h2 class="section-title" id="now-title">{t.now.title}</h2>
       </div>
       <NowList />
@@ -25,7 +25,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(byDa
 
     {featured.length > 0 && (
       <section class="section" aria-labelledby="projects-title">
-        <div class="section-head">
+        <div class="section-head" data-reveal>
           <h2 class="section-title" id="projects-title">{t.home.selected}</h2>
           <a class="section-link" href="/projects">{t.home.allProjects}</a>
         </div>
@@ -35,7 +35,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(byDa
 
     {posts.length > 0 && (
       <section class="section" aria-labelledby="posts-title">
-        <div class="section-head">
+        <div class="section-head" data-reveal>
           <h2 class="section-title" id="posts-title">{t.home.writing}</h2>
           <a class="section-link" href="/blog">{t.home.allPosts}</a>
         </div>

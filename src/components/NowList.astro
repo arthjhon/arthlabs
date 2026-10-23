@@ -4,9 +4,9 @@ import { t } from '../i18n/pt';
 ---
 
 <div class="now">
-  <ul role="list">
-    {now.map((item) => (
-      <li>
+  <ul role="list" data-reveal-stagger>
+    {now.map((item, i) => (
+      <li data-reveal style={`--i:${i}`}>
         <span class="kind">{t.now.kind[item.kind]}</span>
         <span>{item.text}</span>
       </li>

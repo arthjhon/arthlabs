@@ -9,9 +9,9 @@ interface Props {
 const { posts } = Astro.props;
 ---
 
-<ul class="post-list" role="list">
-  {posts.map((p) => (
-    <li>
+<ul class="post-list" role="list" data-reveal-stagger>
+  {posts.map((p, i) => (
+    <li data-reveal style={`--i:${i}`}>
       <time datetime={isoDate(p.data.date)}>{isoDate(p.data.date)}</time>
       <a href={`/blog/${p.id}`}>{p.data.title}</a>
     </li>
