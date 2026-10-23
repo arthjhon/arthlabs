@@ -53,6 +53,7 @@ export const t = {
     home: 'Início',
     projects: 'Projetos',
     blog: 'Blog',
+    navLabel: 'Ir para',
   },
   meta: {
     status: 'status',

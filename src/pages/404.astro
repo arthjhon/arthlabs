@@ -10,7 +10,7 @@ import { t } from '../i18n/pt';
       <RackMark size={96} state="down" />
       <h1>{t.notFound.title}</h1>
       <p class="lead">{t.notFound.lead}</p>
-      <nav class="not-found-links" aria-label={t.notFound.title}>
+      <nav class="not-found-links" aria-label={t.notFound.navLabel}>
         <a href="/">{t.notFound.home}</a>
         <a href="/projects">{t.notFound.projects}</a>
         <a href="/blog">{t.notFound.blog}</a>
@@ -22,4 +22,5 @@ import { t } from '../i18n/pt';
 <style>
   .not-found { display: grid; gap: var(--space-4); justify-items: start; }
   .not-found-links { display: flex; flex-wrap: wrap; gap: var(--space-6); margin-top: var(--space-4); }
+  .not-found-links a { display: inline-flex; align-items: center; min-height: 44px; }
 </style>

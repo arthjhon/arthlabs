@@ -24,4 +24,16 @@ describe('404 page', () => {
   it('shows the rack mark in the down state', () => {
     expect(page().querySelector('svg.rack-mark[data-state="down"]')).not.toBeNull();
   });
+
+  it('labels the nav "Ir para"', () => {
+    expect(page().querySelector('nav.not-found-links')?.getAttribute('aria-label')).toBe('Ir para');
+  });
+
+  it('gives links a 44px minimum target height', () => {
+    const css = [...readFileSync(file, 'utf8').matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)]
+      .map((m) => m[1])
+      .join('\n');
+    const rule = [...css.matchAll(/([^{}]*\.not-found-links[^{}]*\ba\b[^{}]*)\{([^{}]*)\}/g)].map((m) => m[2]);
+    expect(rule.some((b) => /min-height:\s*44px/.test(b))).toBe(true);
+  });
 });
