@@ -32,14 +32,18 @@ async function ready() {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-// Anchor case: hard-load a deep link in a small window and read layout via CDP
-// (--dump-dom has no geometry). Everything above or inside the viewport must be revealed.
-async function checkAnchor(route) {
+// Open a page in headless Chrome driven over CDP. Returns { send, ws, close }.
+async function openPage(width, height, route, extra = []) {
   const dir = mkdtempSync(join(tmpdir(), 'reveal-chrome-'));
   const chrome = spawn('google-chrome', [
     '--headless=new', '--disable-gpu', '--no-sandbox', '--hide-scrollbars',
-    '--remote-debugging-port=0', `--user-data-dir=${dir}`, 'about:blank',
+    '--remote-debugging-port=0', `--user-data-dir=${dir}`, ...extra, 'about:blank',
   ], { stdio: 'ignore', detached: true });
+  const close = async () => {
+    try { process.kill(-chrome.pid); } catch {}
+    await sleep(500);
+    rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+  };
   try {
     let port;
     for (let i = 0; i < 50 && !port; i++) {
@@ -60,10 +64,22 @@ async function checkAnchor(route) {
       pending.set(++id, res);
       ws.send(JSON.stringify({ id, method, params }));
     });
-    await send('Emulation.setDeviceMetricsOverride', { width: 375, height: 700, deviceScaleFactor: 1, mobile: false });
+    await send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: 1, mobile: false });
     await send('Page.navigate', { url: `http://localhost:${PORT}${route}` });
     await sleep(3000);
-    const { result } = await send('Runtime.evaluate', {
+    return { send, ws, close };
+  } catch (e) {
+    await close();
+    throw e;
+  }
+}
+
+// Anchor case: hard-load a deep link in a small window and read layout via CDP
+// (--dump-dom has no geometry). Everything above or inside the viewport must be revealed.
+async function checkAnchor(route) {
+  const page = await openPage(375, 700, route);
+  try {
+    const { result } = await page.send('Runtime.evaluate', {
       returnByValue: true,
       expression: `JSON.stringify({
         scrollY: Math.round(scrollY),
@@ -73,16 +89,40 @@ async function checkAnchor(route) {
         })),
       })`,
     });
-    ws.close();
+    page.ws.close();
     const { scrollY, els } = JSON.parse(result.result.value);
     const due = els.filter((e) => e.top < 700);
     const hidden = due.filter((e) => !e.revealed);
     console.log(`${route}: scrollY=${scrollY}, ${due.length - hidden.length}/${due.length} above-or-in-viewport revealed (${els.length} total)`);
     return scrollY > 0 && due.length > 0 && hidden.length === 0;
   } finally {
-    try { process.kill(-chrome.pid); } catch {}
-    await sleep(500);
-    rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+    await page.close();
+  }
+}
+
+// Cursor-light case: a pointer move must move the light that body::after paints.
+// Reads the computed background of the painting pseudo-element, so a custom property
+// set on an element the pseudo does not inherit from (the 294ab22 regression) fails.
+async function checkPointerLight() {
+  const page = await openPage(1280, 800, '/');
+  try {
+    const read = async () => {
+      const { result } = await page.send('Runtime.evaluate', {
+        returnByValue: true,
+        expression: `getComputedStyle(document.body, '::after').backgroundImage`,
+      });
+      return String(result.result.value);
+    };
+    const before = await read();
+    await page.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: 200, y: 600, pointerType: 'mouse' });
+    await sleep(300);
+    const after = await read();
+    page.ws.close();
+    const ok = after !== before && after.includes('200px') && after.includes('600px');
+    console.log(`pointer light: ${ok ? 'follows' : 'DOES NOT follow'} pointer (after: ${after.slice(0, 80)})`);
+    return ok;
+  } finally {
+    await page.close();
   }
 }
 
@@ -101,6 +141,7 @@ try {
     if (tags.length === 0 || hidden.length > 0) failed = true;
   }
   if (!(await checkAnchor('/about#homelab-title'))) failed = true;
+  if (!(await checkPointerLight())) failed = true;
 } finally {
   stop();
 }
