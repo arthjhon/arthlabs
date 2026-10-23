@@ -22,6 +22,20 @@ body {
 img, svg { display: block; max-width: 100%; }
 
 h1, h2, h3, h4 { line-height: 1.2; font-weight: 600; text-wrap: balance; }
+
+/* Display type: Archivo SemiExpanded. Body UI stays at 100% width. */
+.display,
+.hero h1,
+.page-head h1,
+.section-title,
+.project-row .title,
+.reading .title,
+.logo {
+  font-family: var(--font-display);
+  font-stretch: 112%;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
 p { text-wrap: pretty; overflow-wrap: anywhere; }
 
 a { color: inherit; text-decoration-color: var(--color-border); text-underline-offset: 0.2em; }
@@ -69,7 +83,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .page { padding-block: var(--space-12) var(--space-24); }
 
 .page-head { margin-bottom: var(--space-12); max-width: var(--measure); }
-.page-head h1 { font-size: var(--text-2xl); letter-spacing: -0.01em; }
+.page-head h1 { font-size: var(--text-2xl); }
 @media (min-width: 960px) { .page-head h1 { font-size: var(--text-3xl); } }
 
 .lead { margin-top: var(--space-3); color: var(--color-muted); font-size: var(--text-md); }

@@ -1,15 +1,12 @@
 ---
 import { ClientRouter } from 'astro:transitions';
-import '@fontsource/ibm-plex-sans/latin-400.css';
-import '@fontsource/ibm-plex-sans/latin-500.css';
-import '@fontsource/ibm-plex-sans/latin-600.css';
+import '@fontsource-variable/archivo/wdth.css';
 import '@fontsource/source-serif-4/latin-400.css';
 import '@fontsource/source-serif-4/latin-400-italic.css';
 import '@fontsource/source-serif-4/latin-600.css';
 import '@fontsource/jetbrains-mono/latin-400.css';
 import '@fontsource/jetbrains-mono/latin-500.css';
-import plexRegular from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2?url';
-import plexSemibold from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2?url';
+import archivo from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
 import serifRegular from '@fontsource/source-serif-4/files/source-serif-4-latin-400-normal.woff2?url';
 import '../styles/tokens.css';
 import '../styles/base.css';
@@ -66,8 +63,7 @@ const ogImage = new URL(image, Astro.site).toString();
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title="arThLabs blog" href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="preload" href={plexRegular} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={plexSemibold} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={archivo} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={serifRegular} as="font" type="font/woff2" crossorigin />
 
     <title>{title}</title>
