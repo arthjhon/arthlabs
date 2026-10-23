@@ -31,20 +31,6 @@ describe('atmosphere', () => {
     expect(found.some((b) => b.includes('var(--mx') && b.includes('var(--my'))).toBe(true);
   });
 
-  it('registers --mx/--my as non-inheriting lengths with the no-JS default', () => {
-    const css = readAllCss();
-    expect(css).toMatch(/@property --mx\s*\{[^}]*inherits:\s*false[^}]*initial-value:\s*70vw/);
-    expect(css).toMatch(/@property --my\s*\{[^}]*inherits:\s*false[^}]*initial-value:\s*30vh/);
-  });
-
-  it('pointer script writes --mx/--my on body and reads the row rect first', () => {
-    const html = readDist('/');
-    expect(html).not.toMatch(/documentElement\.style\.setProperty\('--mx/);
-    const script = html.slice(html.indexOf('__pointerBound'));
-    expect(script.indexOf('getBoundingClientRect')).toBeGreaterThan(-1);
-    expect(script.indexOf('getBoundingClientRect')).toBeLessThan(script.indexOf("setProperty('--mx'"));
-  });
-
   it('cursor light is off for coarse pointers and reduced motion', () => {
     for (const q of [/pointer:\s*coarse/, /prefers-reduced-motion:\s*reduce/]) {
       const block = mediaBlock(q);

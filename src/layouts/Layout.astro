@@ -89,15 +89,14 @@ const ogImage = new URL(image, Astro.site).toString();
         if (window.__pointerBound) return;
         window.__pointerBound = true;
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var root = document.documentElement;
         var x = 0, y = 0, row = null, queued = false;
         function paint() {
           queued = false;
-          // Read layout before any style write to avoid a forced synchronous reflow.
-          var r = row ? row.getBoundingClientRect() : null;
-          var body = document.body;
-          body.style.setProperty('--mx', x + 'px');
-          body.style.setProperty('--my', y + 'px');
-          if (row && r) {
+          root.style.setProperty('--mx', x + 'px');
+          root.style.setProperty('--my', y + 'px');
+          if (row) {
+            var r = row.getBoundingClientRect();
             row.style.setProperty('--rx', x - r.left + 'px');
             row.style.setProperty('--ry', y - r.top + 'px');
           }
