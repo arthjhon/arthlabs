@@ -1,5 +1,6 @@
 ---
 import { t } from '../i18n/pt';
+import RackMark from './RackMark.astro';
 
 const { pathname } = Astro.url;
 const items = [
@@ -13,7 +14,7 @@ const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${
 
 <header class="site-header">
   <div class="container bar">
-    <a class="logo" href="/" aria-label="arThLabs — início">arTh<span>Labs</span></a>
+    <a class="logo" href="/" aria-label="arThLabs — início"><RackMark size={26} /><span class="word">arTh<span>Labs</span></span></a>
     <nav aria-label={t.nav.label}>
       <ul>
         {items.map((item) => (
@@ -23,9 +24,7 @@ const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${
         ))}
       </ul>
     </nav>
-    <div class="tools">
-      {/* i18n sub-project: language switcher goes here */}
-    </div>
+    {/* i18n sub-project: language switcher goes here */}
   </div>
 </header>
 
@@ -47,12 +46,16 @@ const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${
     flex-wrap: wrap;
   }
   .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 44px;
     font-size: var(--text-md);
     text-decoration: none;
     margin-right: auto;
   }
-  .logo span { color: var(--color-muted); font-weight: 400; }
-  .logo:hover span { color: var(--color-accent); }
+  .word span { color: var(--color-muted); font-weight: 500; }
+  .logo:hover .word span { color: var(--color-accent); }
   nav ul {
     display: flex;
     gap: var(--space-1);
@@ -72,7 +75,6 @@ const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${
   }
   nav a:hover { color: var(--color-text); }
   nav a[aria-current='page'] { color: var(--color-accent-2); border-bottom-color: var(--color-accent-2); }
-  .tools { display: flex; align-items: center; }
 
   @media (max-width: 639px) {
     nav { order: 3; width: 100%; margin-inline: calc(var(--space-3) * -1); }
