@@ -47,6 +47,13 @@ export const t = {
     empty: 'Nenhum post publicado ainda. Os primeiros estão sendo escritos.',
     back: '← Blog',
   },
+  notFound: {
+    title: 'Link fora do ar',
+    lead: 'Essa rota não responde: o endereço mudou, nunca existiu ou está digitado errado.',
+    home: 'Início',
+    projects: 'Projetos',
+    blog: 'Blog',
+  },
   meta: {
     status: 'status',
     stack: 'stack',

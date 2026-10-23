@@ -8,7 +8,9 @@
     "binding": "ASSETS",
     // The worker must see every request to route by Host
     // (links.arthlabs.dev, www → apex); static files are served via env.ASSETS.
-    "run_worker_first": true
+    "run_worker_first": true,
+    // Unknown paths get dist/404.html with status 404.
+    "not_found_handling": "404-page"
   },
   // Declared explicitly so `wrangler deploy` keeps the current state:
   // apex + www were custom domains set in the dashboard; links is new.
