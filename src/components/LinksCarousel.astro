@@ -45,10 +45,14 @@ const total = highlights.length + projects.length;
     </div>
 
     {total > 1 && (
-      <div class="carousel-dots">
+      <div class="carousel-controls">
+        <button type="button" class="arrow arrow-prev" aria-label={t.links.prev} disabled>‹</button>
+        <div class="carousel-dots">
         {Array.from({ length: total }, (_, i) => (
           <button type="button" class="dot" aria-label={`${t.links.goTo} ${i + 1}`} aria-current={i === 0 ? 'true' : undefined} />
         ))}
+        </div>
+        <button type="button" class="arrow arrow-next" aria-label={t.links.next}>›</button>
       </div>
     )}
   </section>
@@ -109,14 +113,46 @@ const total = highlights.length + projects.length;
   }
 
   .card .button { margin-top: auto; }
+  .card:has(a:active) { border-color: var(--color-accent); }
 
   /* Dots need JS to track position; without it the track still scrolls. */
-  .carousel-dots { display: none; justify-content: center; gap: var(--space-1); }
-  :global(.js) .carousel-dots { display: flex; }
+  .carousel-controls { display: none; align-items: center; justify-content: center; gap: var(--space-2); }
+  :global(.js) .carousel-controls { display: flex; }
+  .carousel-dots { display: flex; justify-content: center; }
+
+  .arrow {
+    display: none;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    place-items: center;
+    font-size: var(--text-xl);
+    line-height: 1;
+    color: var(--color-text);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: border-color var(--dur) var(--ease), opacity var(--dur) var(--ease);
+  }
+  .arrow:hover:not(:disabled),
+  .arrow:focus-visible,
+  .arrow:active:not(:disabled) { border-color: var(--color-accent); }
+  .arrow:disabled { opacity: 0.35; cursor: default; }
+
+  @media (min-width: 640px) {
+    .arrow { display: grid; }
+    .carousel-controls { justify-content: space-between; }
+    .carousel-track {
+      -webkit-mask-image: linear-gradient(to right, #000 85%, transparent);
+      mask-image: linear-gradient(to right, #000 85%, transparent);
+    }
+    .carousel-track.at-end { -webkit-mask-image: none; mask-image: none; }
+  }
 
   .dot {
-    width: 24px;
-    height: 24px;
+    width: 44px;
+    height: 44px;
     padding: 0;
     border: 0;
     background: transparent;
@@ -138,7 +174,7 @@ const total = highlights.length + projects.length;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .dot::before { transition: none; }
+    .dot::before, .arrow { transition: none; }
   }
 </style>
 
@@ -167,9 +203,31 @@ const total = highlights.length + projects.length;
       cards.forEach((c) => io.observe(c));
 
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const behavior: ScrollBehavior = reduced ? 'auto' : 'smooth';
+
+      const prev = root.querySelector<HTMLButtonElement>('.arrow-prev');
+      const next = root.querySelector<HTMLButtonElement>('.arrow-next');
+      const sync = () => {
+        const max = track.scrollWidth - track.clientWidth;
+        const atStart = track.scrollLeft <= 1;
+        const atEnd = track.scrollLeft >= max - 1;
+        if (prev) prev.disabled = atStart;
+        if (next) next.disabled = atEnd;
+        track.classList.toggle('at-end', atEnd);
+      };
+      const step = () => {
+        const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+        return (cards[0]?.offsetWidth ?? track.clientWidth) + gap;
+      };
+      prev?.addEventListener('click', () => track.scrollBy({ left: -step(), behavior }));
+      next?.addEventListener('click', () => track.scrollBy({ left: step(), behavior }));
+      track.addEventListener('scroll', sync, { passive: true });
+      window.addEventListener('resize', sync);
+      sync();
+
       dots.forEach((d, i) =>
         d.addEventListener('click', () =>
-          track.scrollTo({ left: cards[i].offsetLeft - track.offsetLeft, behavior: reduced ? 'auto' : 'smooth' }),
+          track.scrollTo({ left: cards[i].offsetLeft - track.offsetLeft, behavior }),
         ),
       );
     });
