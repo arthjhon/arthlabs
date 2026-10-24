@@ -95,6 +95,9 @@ export const t = {
     tiles: 'Redes e contato',
     carousel: 'Destaques',
     goTo: 'Ir para o destaque',
+    prev: 'Destaque anterior',
+    next: 'Próximo destaque',
+    bio: 'Projeto, opero e monitoro infraestrutura — do firewall à IoT em campo.',
     project: 'Ver projeto',
     affiliate:
       'Alguns destaques são links de indicação: posso receber comissão, sem custo extra para você.',

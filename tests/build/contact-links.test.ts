@@ -3,6 +3,8 @@ import { loadPage } from './helpers';
 import { readdirSync, readFileSync } from 'node:fs';
 import { links } from '../../src/data/links';
 import { highlights } from '../../src/data/highlights';
+import { t } from '../../src/i18n/pt';
+import { readAllCss } from './helpers';
 
 describe('/contact', () => {
   const doc = loadPage('/contact');
@@ -38,6 +40,39 @@ describe('/links', () => {
   it('renders every link as a tile, without gradient frame or prompt', () => {
     expect(doc.querySelectorAll('a.link-tile').length).toBe(links.length);
     expect(doc.text).not.toContain('$ whoami');
+  });
+
+  it('renders exactly 5 tiles, without Blog', () => {
+    const tiles = doc.querySelectorAll('a.link-tile');
+    expect(tiles.length).toBe(5);
+    for (const a of tiles) {
+      expect(a.text).not.toContain('Blog');
+      expect(a.getAttribute('href')).not.toMatch(/\/blog/);
+    }
+  });
+
+  it('first tile is the rack mark (svg with LED circle)', () => {
+    expect(doc.querySelector('a.link-tile svg circle')).not.toBeNull();
+    const first = doc.querySelectorAll('a.link-tile')[0];
+    expect(first.querySelector('svg circle')).not.toBeNull();
+  });
+
+  it('each tile maps to a brand token', () => {
+    for (const a of doc.querySelectorAll('a.link-tile')) {
+      expect(a.getAttribute('style') ?? '').toMatch(/--c:\s*var\(--brand-/);
+    }
+  });
+
+  it('renders the bio under the role', () => {
+    expect(doc.querySelector('p.bio')!.text.trim()).toBe(t.links.bio);
+  });
+
+  it('dots are 44px tap targets and arrows are labelled', () => {
+    const css = readAllCss('/links').replace(/\s+/g, '');
+    expect(css).toMatch(/\.dot[^{]*\{[^}]*width:44px/);
+    expect(css).toMatch(/\.dot[^{]*\{[^}]*height:44px/);
+    expect(doc.querySelector(`button[aria-label="${t.links.prev}"]`)).not.toBeNull();
+    expect(doc.querySelector(`button[aria-label="${t.links.next}"]`)).not.toBeNull();
   });
 
   it('has no theme toggle and carries the rack mark', () => {

@@ -15,6 +15,13 @@
   --color-danger: #FF7A59;
   --color-glow: #1D4ED8;
 
+  /* Brand colours of the /links tiles (icon + border tint). */
+  --brand-site: var(--color-accent);
+  --brand-github: var(--color-text);
+  --brand-linkedin: #4A9BF0;
+  --brand-instagram: #F0609E;
+  --brand-email: var(--color-accent);
+
   --font-display: 'Archivo Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-sans: 'Archivo Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;

@@ -16,7 +16,7 @@ const hasAffiliate = highlights.some((h) => h.affiliate);
 
 <Layout
   title="Arthur Jhonathas · arThLabs"
-  description="Links do Arthur Jhonathas — site, blog, GitHub, LinkedIn, Instagram e contato."
+  description="Links do Arthur Jhonathas — site, GitHub, LinkedIn, Instagram e contato."
   canonical="https://links.arthlabs.dev"
   bare
 >
@@ -25,6 +25,7 @@ const hasAffiliate = highlights.some((h) => h.affiliate);
       <img class="photo" src="/images/arthur.webp" width="640" height="640" alt="" />
       <h1 class="display">Arthur Jhonathas</h1>
       <p class="role">{t.home.role}</p>
+      <p class="bio">{t.links.bio}</p>
     </header>
 
     <ul class="tiles" role="list" aria-label={t.links.tiles}>
@@ -32,7 +33,7 @@ const hasAffiliate = highlights.some((h) => h.affiliate);
         const external = !l.href.startsWith('mailto:');
         return (
           <li>
-            <a class="link-tile" href={l.href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
+            <a class="link-tile" style={`--c: var(--brand-${l.brand})`} href={l.href} target={external ? '_blank' : undefined} rel={external ? 'noopener' : undefined}>
               <span class="icon" set:html={icons[l.icon]} />
               <span class="name">{l.label}</span>
             </a>
@@ -66,33 +67,59 @@ const hasAffiliate = highlights.some((h) => h.affiliate);
   h1 { font-size: var(--text-2xl); margin-top: var(--space-2); }
   .role { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-accent-2); }
 
+  .bio {
+    font-family: var(--font-serif);
+    font-size: var(--text-md);
+    line-height: 1.5;
+    color: var(--color-muted);
+    max-width: 32ch;
+  }
+
   .tiles {
     list-style: none;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: var(--space-3);
   }
   .link-tile {
-    aspect-ratio: 1;
     display: grid;
-    place-content: center;
     justify-items: center;
+    align-content: start;
     gap: var(--space-2);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
+    min-width: 0;
+    min-height: 44px;
     color: var(--color-text);
     text-decoration: none;
-    transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
   }
-  .icon { display: inline-flex; color: var(--color-muted); transition: color var(--dur) var(--ease); }
-  .icon :global(svg) { width: 28px; height: 28px; }
-  .name { font-size: var(--text-sm); font-weight: 500; }
-  .link-tile:hover,
-  .link-tile:focus-visible { border-color: var(--color-accent); color: var(--color-text); }
+  .icon {
+    display: grid;
+    place-items: center;
+    width: min(58px, 100%);
+    aspect-ratio: 1;
+    border-radius: 16px;
+    color: var(--c);
+    background: color-mix(in oklab, var(--c) 7%, var(--color-surface));
+    border: 1px solid color-mix(in oklab, var(--c) 45%, var(--color-border));
+    transition: border-color var(--dur) var(--ease);
+  }
+  .icon :global(svg) { width: 24px; height: 24px; }
+  .name {
+    max-width: 100%;
+    font-size: 11.5px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .link-tile:hover .icon,
-  .link-tile:focus-visible .icon { color: var(--color-accent); }
+  .link-tile:focus-visible .icon,
+  .link-tile:active .icon { border-color: var(--c); }
+  @media (prefers-reduced-motion: reduce) {
+    .icon { transition: none; }
+  }
 
   .foot {
     margin-top: auto;

@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { links, icons } from '../data/links';
 import { t } from '../i18n/pt';
 
-const socials = links.filter((l) => !['Site', 'Blog'].includes(l.label));
+const socials = links.filter((l) => !['Site'].includes(l.label));
 ---
 
 <Layout title={`${t.contact.title} · arThLabs`} description={t.contact.lead}>
