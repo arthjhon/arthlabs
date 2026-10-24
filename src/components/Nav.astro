@@ -1,20 +1,83 @@
 ---
+import { t } from '../i18n/pt';
+import RackMark from './RackMark.astro';
+
 const { pathname } = Astro.url;
-const isActive = (path: string) =>
-  path === '/' ? pathname === '/' : pathname.startsWith(path);
+const items = [
+  { href: '/projects', label: t.nav.projects },
+  { href: '/blog', label: t.nav.blog },
+  { href: '/about', label: t.nav.about },
+  { href: '/contact', label: t.nav.contact },
+];
+const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 ---
 
-<nav>
-  <a class="nav-logo" href="/">arTh<span>Labs</span></a>
-  <ul class="nav-links">
-    <li><a href="/" class={isActive('/') ? 'active' : ''}>~/home</a></li>
-    <li><a href="/projects" class={isActive('/projects') ? 'active' : ''}>~/projects</a></li>
-    <li><a href="/blog" class={isActive('/blog') ? 'active' : ''}>~/blog</a></li>
-    <li><a href="/about" class={isActive('/about') ? 'active' : ''}>~/about</a></li>
-    <li><a href="/contact" class={isActive('/contact') ? 'active' : ''}>~/contact</a></li>
-  </ul>
-  <div class="nav-status">
-    <div class="status-dot"></div>
-    <span>Maceió, BR</span>
+<header class="site-header">
+  <div class="container bar">
+    <a class="logo" href="/" aria-label="arThLabs — início"><RackMark size={26} /><span class="word">arTh<span>Labs</span></span></a>
+    <nav aria-label={t.nav.label}>
+      <ul>
+        {items.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    {/* i18n sub-project: language switcher goes here */}
   </div>
-</nav>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in oklab, var(--color-bg) 72%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    min-height: 60px;
+    flex-wrap: wrap;
+  }
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    font-size: var(--text-md);
+    text-decoration: none;
+    margin-right: auto;
+  }
+  .word span { color: var(--color-muted); font-weight: 500; }
+  .logo:hover .word span { color: var(--color-accent); }
+  nav ul {
+    display: flex;
+    gap: var(--space-1);
+    list-style: none;
+    padding: 0;
+  }
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  nav a:hover { color: var(--color-text); }
+  nav a[aria-current='page'] { color: var(--color-accent-2); border-bottom-color: var(--color-accent-2); }
+
+  @media (max-width: 639px) {
+    nav { order: 3; width: 100%; margin-inline: calc(var(--space-3) * -1); }
+    nav ul { overflow-x: auto; }
+  }
+</style>

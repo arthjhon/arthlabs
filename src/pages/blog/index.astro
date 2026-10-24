@@ -1,31 +1,36 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import BlogItem from '../../components/BlogItem.astro';
+import PostList from '../../components/PostList.astro';
+import { groupByCategory } from '../../lib/content';
+import { t } from '../../i18n/pt';
 
-const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.date.getTime() - a.data.date.getTime()
-);
+const groups = groupByCategory(await getCollection('blog', ({ data }) => !data.draft));
 ---
 
-<Layout title="Blog · arThLabs" description="Posts técnicos sobre IoT, DevOps e infraestrutura.">
-  <section class="page">
-    <div class="section-header" style="margin-bottom: 8px;">
-      <span class="section-label">blog técnico</span>
-      <div class="section-line"></div>
-    </div>
-    <p class="term-line">$ grep -r "tag:IoT\|tag:DevOps\|tag:Infra" ~/arthlabs/blog/ <span class="caret">▎</span></p>
+<Layout title={`${t.blog.title} · arThLabs`} description={t.blog.lead}>
+  <div class="container page">
+    <header class="page-head">
+      <h1>{t.blog.title}</h1>
+      <p class="lead">{t.blog.lead}</p>
+    </header>
 
-    <div class="blog-list">
-      {posts.map((p) => (
-        <BlogItem
-          title={p.data.title}
-          excerpt={p.data.excerpt}
-          date={p.data.date}
-          tags={p.data.tags}
-          slug={p.id}
-        />
-      ))}
-    </div>
-  </section>
+    {groups.length === 0 ? (
+      <p class="empty">{t.blog.empty}</p>
+    ) : (
+      groups.map((g) => (
+        <section class="section" aria-labelledby={`cat-${g.category}`}>
+          <div class="section-head">
+            <h2 class="section-title" id={`cat-${g.category}`}>{t.category[g.category]}</h2>
+            <span class="eyebrow" aria-hidden="true">{g.items.length}</span>
+          </div>
+          <PostList posts={g.items} />
+        </section>
+      ))
+    )}
+  </div>
 </Layout>
+
+<style>
+  .empty { color: var(--color-muted); max-width: var(--measure); }
+</style>

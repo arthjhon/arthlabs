@@ -1,0 +1,60 @@
+---
+title: "Servidores de CS2 — FECAPEES"
+description: "Infra de produção para campeonatos de CS2 da Federação Capixaba de Esportes Eletrônicos: Pelican Panel + Wings, MatchZy, backup com restore testado, firewall e acesso privado."
+tags: [Ubuntu, Pelican Panel, Wings, Caddy, MariaDB, Tailscale, ufw, CS2, MatchZy]
+status: active
+github: ""
+demo: ""
+writeup: "included"
+date: 2026-08-29
+featured: true
+---
+
+## Contexto
+
+Prestação de serviço de infraestrutura para a Federação Capixaba de Esportes Eletrônicos (FECAPEES): servidores dedicados de Counter-Strike 2 para os campeonatos da federação. O trabalho cobriu provisionamento, hardening, configuração e documentação, validado primeiro em lab e depois implantado em produção no host da federação. A documentação foi entregue em PDF.
+
+## Arquitetura
+
+- **Ubuntu 24.04** em bare-metal.
+- **Pelican Panel + Wings** para gerenciar os servidores de jogo, com Caddy (CA interna) na frente do painel, PHP-FPM e MariaDB.
+- **CS2** com MatchZy e CounterStrikeSharp para partidas de campeonato.
+- **Tailscale** para o acesso administrativo e **ufw** como firewall do host.
+
+## Do lab para produção (decisões)
+
+- **Docker Compose para bare-metal:** o upstream trata o deploy do painel em Docker como trabalho em andamento.
+- **`:latest` para tag fixa com checksum.**
+- **SQLite para MariaDB.**
+- **Confiança na CA interna** via `update-ca-certificates`.
+- **Firewall:** ufw ativo.
+- **Backup:** de inexistente para timer diário.
+
+## Backup com restore testado
+
+Backup diário por timer, com retenção de 14 dias. O restore foi testado em 30/08/2026: as contagens de usuários, nodes, migrations e eggs ficaram idênticas entre o original e o restaurado.
+
+## Armadilhas encontradas
+
+- O Caddy 2.11 assume qualquer SNI do domínio MagicDNS da tailnet pela integração com o Tailscale, sem fallback. A saída foi ancorar o site no endereço da tailnet.
+- Um site block `:443` sem subject quebra o `tls internal`.
+- `sudo caddy validate` cria o arquivo de log como root.
+- O socket do PHP-FPM ilegível para o Caddy gera 502; o ajuste é o `listen.group`.
+- O queue worker precisa de restart depois do wizard de instalação: os jobs ficam parados com `attempts: 0` e sem erro algum.
+- Queue e cron só aparecem documentados na UI do instalador.
+- O `storage:link` roda apenas no update.
+- O Wings grava o timezone como `Etc/UTC`.
+- A organização upstream foi renomeada de `pelican-dev` para `pelican`.
+
+## O bug de cultura no MatchZy
+
+Com `ServerLanguage: pt-BR`, os spawns de coach são corrompidos: o plugin faz `float.Parse` sem `InvariantCulture`, e uma coordenada como `-2022.5101` vira `-20225101`. No dust2 isso lança exceção; nos demais mapas do pool a falha é silenciosa. Os contornos avaliados foram descartados e a decisão foi manter o idioma em `en`.
+
+## Configuração do campeonato
+
+- MR12, com overtime MR3 e $10.000 (dinheiro do jogo).
+- 3 pausas táticas de 45 s.
+- Pausa técnica sem limite, o que exige regra no regulamento e `.forceunpause` do árbitro.
+- Pool de 7 mapas.
+- Templates BO1, BO3 e BO5.
+- Os comandos documentados foram extraídos do binário do plugin, não da documentação genérica.

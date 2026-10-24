@@ -1,0 +1,27 @@
+---
+import { t } from '../i18n/pt';
+import type { Status } from '../lib/content';
+
+interface Props {
+  status: Status;
+}
+
+const { status } = Astro.props;
+const SYMBOL: Record<Status, string> = { active: '●', wip: '◐', archived: '○' };
+---
+
+<span class={`status status-${status}`}><span aria-hidden="true">{SYMBOL[status]}</span> {t.status[status]}</span>
+
+<style>
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    white-space: nowrap;
+    color: var(--color-muted);
+  }
+  .status-active { color: var(--color-accent); }
+  .status-wip { color: var(--color-status-wip); }
+</style>

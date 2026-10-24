@@ -1,0 +1,40 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { isoDate } from '../lib/content';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ul class="post-list" role="list" data-reveal-stagger>
+  {posts.map((p, i) => (
+    <li data-reveal style={`--i:${i}`}>
+      <time datetime={isoDate(p.data.date)}>{isoDate(p.data.date)}</time>
+      <a href={`/blog/${p.id}`}>{p.data.title}</a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .post-list { list-style: none; padding: 0; border-top: 1px solid var(--color-border); }
+  li {
+    display: grid;
+    gap: var(--space-1);
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+  }
+  @media (min-width: 640px) {
+    li { grid-template-columns: 120px minmax(0, 1fr); gap: var(--space-6); align-items: baseline; }
+  }
+  time {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  a { text-decoration: none; font-weight: 500; }
+  a:hover { color: var(--color-accent); }
+</style>

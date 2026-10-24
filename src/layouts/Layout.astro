@@ -1,28 +1,42 @@
 ---
 import { ClientRouter } from 'astro:transitions';
-import '@fontsource/sora/300.css';
-import '@fontsource/sora/400.css';
-import '@fontsource/sora/600.css';
-import '@fontsource/jetbrains-mono/400.css';
-import '@fontsource/jetbrains-mono/500.css';
-import '@fontsource/jetbrains-mono/700.css';
-import '../styles/global.css';
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource/source-serif-4/latin-400.css';
+import '@fontsource/source-serif-4/latin-400-italic.css';
+import '@fontsource/source-serif-4/latin-600.css';
+import '@fontsource/jetbrains-mono/latin-400.css';
+import '@fontsource/jetbrains-mono/latin-500.css';
+import archivo from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import serifRegular from '@fontsource/source-serif-4/files/source-serif-4-latin-400-normal.woff2?url';
+import '../styles/tokens.css';
+import '../styles/base.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import { t } from '../i18n/pt';
 
 interface Props {
   title?: string;
   description?: string;
   image?: string;
+  /** Absolute canonical URL; defaults to Astro.site + pathname. */
+  canonical?: string;
+  /** Standalone page: no nav, no footer (e.g. links.arthlabs.dev). */
+  bare?: boolean;
+  /** Emit <meta name="robots" content="noindex"> (e.g. the 404 page). */
+  noindex?: boolean;
 }
 
 const {
-  title = 'arThLabs — personal lab & dev portfolio',
-  description = 'Projetos pessoais em IoT, software e infra — experimentação antes de produção.',
-  image = '/og-default.svg',
+  title = 'arThLabs — Arthur Jhonathas, infra & SysAdmin',
+  description = 'Projetos e notas técnicas de Arthur Jhonathas: infraestrutura, redes, monitoramento, IoT e automação.',
+  image = '/og-default.png',
+  bare = false,
+  noindex = false,
 } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site).toString().replace(/\/$/, '') || Astro.site!.toString();
+const canonical =
+  Astro.props.canonical ??
+  (new URL(Astro.url.pathname, Astro.site).toString().replace(/\/$/, '') || Astro.site!.toString());
 const ogImage = new URL(image, Astro.site).toString();
 ---
 
@@ -33,6 +47,7 @@ const ogImage = new URL(image, Astro.site).toString();
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
 
     <meta property="og:site_name" content="arThLabs" />
@@ -41,6 +56,8 @@ const ogImage = new URL(image, Astro.site).toString();
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="pt_BR" />
 
     <meta name="twitter:card" content="summary_large_image" />
@@ -48,37 +65,61 @@ const ogImage = new URL(image, Astro.site).toString();
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <meta name="theme-color" content="#080b0f" />
+    <meta name="theme-color" content="#070B14" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" type="application/rss+xml" title="arThLabs blog" href="/rss.xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preload" href={archivo} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={serifRegular} as="font" type="font/woff2" crossorigin />
 
     <title>{title}</title>
 
     <script is:inline>
       (function () {
-        document.documentElement.classList.add('js');
-        try {
-          const stored = localStorage.getItem('theme');
-          const prefers = window.matchMedia('(prefers-color-scheme: light)').matches;
-          const theme = stored || (prefers ? 'light' : 'dark');
-          document.documentElement.dataset.theme = theme;
-        } catch (_) {
-          document.documentElement.dataset.theme = 'dark';
+        function apply() { document.documentElement.classList.add('js'); }
+        apply();
+        if (!window.__jsClassBound) {
+          window.__jsClassBound = true;
+          document.addEventListener('astro:after-swap', apply);
         }
       })();
     </script>
+    <script is:inline>
+      (function () {
+        if (window.__pointerBound) return;
+        window.__pointerBound = true;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var root = document.documentElement;
+        var x = 0, y = 0, row = null, queued = false;
+        function paint() {
+          queued = false;
+          root.style.setProperty('--mx', x + 'px');
+          root.style.setProperty('--my', y + 'px');
+          if (row) {
+            var r = row.getBoundingClientRect();
+            row.style.setProperty('--rx', x - r.left + 'px');
+            row.style.setProperty('--ry', y - r.top + 'px');
+          }
+        }
+        document.addEventListener('pointermove', function (e) {
+          x = e.clientX; y = e.clientY;
+          row = e.target instanceof Element ? e.target.closest('.project-row') : null;
+          if (!queued) { queued = true; requestAnimationFrame(paint); }
+        }, { passive: true });
+      })();
+    </script>
     <ClientRouter />
+    <script>
+      import '../scripts/reveal.ts';
+    </script>
   </head>
   <body>
-    <a href="#main" class="skip-link">pular para o conteúdo</a>
-    <div class="site-wrapper">
-      <Nav />
-      <main id="main">
-        <slot />
-      </main>
-      <Footer />
-    </div>
+    <a href="#main" class="skip-link">{t.skip}</a>
+    {!bare && <Nav />}
+    <main id="main">
+      <slot />
+    </main>
+    {!bare && <Footer />}
     {/* Cloudflare Web Analytics — production only (avoids CORS noise in local dev) */}
     {import.meta.env.PROD && (
       <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "c7b221d32ae74188b1ae6f5997b38eaf"}'></script>

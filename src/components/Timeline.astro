@@ -1,0 +1,26 @@
+---
+import { timeline } from '../data/experience';
+---
+
+<ol class="timeline" role="list" data-reveal-stagger>
+  {timeline.map((e, i) => (
+    <li data-reveal style={`--i:${i}`}>
+      <span class="period">{e.period}</span>
+      <div>
+        <p class="role"><strong>{e.role}</strong> · {e.org}</p>
+        <p class="summary">{e.summary}</p>
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .timeline { list-style: none; padding: 0; display: grid; gap: var(--space-6); }
+  li { display: grid; gap: var(--space-1); }
+  @media (min-width: 640px) {
+    li { grid-template-columns: 200px minmax(0, 1fr); gap: var(--space-6); }
+  }
+  .period { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-muted); padding-top: 0.2em; }
+  .role strong { font-weight: 600; }
+  .summary { color: var(--color-muted); }
+</style>

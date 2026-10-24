@@ -1,0 +1,26 @@
+---
+import Layout from '../layouts/Layout.astro';
+import RackMark from '../components/RackMark.astro';
+import { t } from '../i18n/pt';
+---
+
+<Layout title={`${t.notFound.title} · arThLabs`} description={t.notFound.lead} noindex>
+  <div class="container page">
+    <header class="page-head not-found" data-reveal>
+      <RackMark size={96} state="down" />
+      <h1>{t.notFound.title}</h1>
+      <p class="lead">{t.notFound.lead}</p>
+      <nav class="not-found-links" aria-label={t.notFound.navLabel}>
+        <a href="/">{t.notFound.home}</a>
+        <a href="/projects">{t.notFound.projects}</a>
+        <a href="/blog">{t.notFound.blog}</a>
+      </nav>
+    </header>
+  </div>
+</Layout>
+
+<style>
+  .not-found { display: grid; gap: var(--space-4); justify-items: start; }
+  .not-found-links { display: flex; flex-wrap: wrap; gap: var(--space-6); margin-top: var(--space-4); }
+  .not-found-links a { display: inline-flex; align-items: center; min-height: 44px; }
+</style>

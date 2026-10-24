@@ -1,0 +1,59 @@
+/* Design tokens. Components consume only these variables — never raw hex. */
+
+:root {
+  color-scheme: dark;
+
+  --color-bg: #070B14;
+  --color-surface: #0C1322;
+  --color-border: #1B2740;
+  --color-text: #E6ECF5;
+  --color-muted: #8C9AB3;
+  --color-accent: #F5A524;
+  --color-on-accent: #1A1206;
+  --color-accent-2: #7CC4FF;
+  --color-status-wip: #7CC4FF;
+  --color-danger: #FF7A59;
+  --color-glow: #1D4ED8;
+
+  /* Brand colours of the /links tiles (icon + border tint). */
+  --brand-site: var(--color-accent);
+  --brand-github: var(--color-text);
+  --brand-linkedin: #4A9BF0;
+  --brand-instagram: #F0609E;
+  --brand-email: var(--color-accent);
+
+  --font-display: 'Archivo Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Archivo Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --text-xs: 0.8rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5625rem;
+  --text-2xl: 1.953rem;
+  --text-3xl: 2.441rem;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+
+  --radius: 6px;
+  --container: 1100px;
+  --measure: 68ch;
+  --dur: 180ms;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --header-h: 64px; /* sticky header height; measured 61px desktop, 105px at 375px */
+}
+
+@media (max-width: 639px) {
+  :root { --header-h: 112px; }
+}
